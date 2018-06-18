@@ -55,6 +55,9 @@ div#map {
   height: 100%;
   width: auto; }
 
+#featureModalPic {
+  width: 100%; }
+
 .cluster {
   background: #2d84c8;
   border-radius: 50%;

@@ -37607,6 +37607,27 @@ var query = L.esri.query({
           icon: icon
         });
       },
+      onEachFeature: function onEachFeature(feature, layer) {
+        layer.on('click', function () {
+          $("#featureModal .modal-title").html(feature.properties.NAME);
+
+          var modal_content = '';
+
+          if (feature.properties.PIC_URL) {
+            modal_content += '<img id="featureModalPic" class="mb-3" src="' + feature.properties.PIC_URL + '">';
+          }
+          if (feature.properties.TAB_NAME) {
+            modal_content += '<p>Category: <i>' + feature.properties.TAB_NAME + '</i></p>';
+          }
+          if (feature.properties.DESC1) {
+            modal_content += feature.properties.DESC1;
+          }
+
+          $("#featureModal .modal-body").html(modal_content);
+
+          $("#featureModal").modal("show");
+        });
+      },
       filter: function filter(feature, layer) {
         if (feature.properties.TAB_NAME == cat) {
           return true;
