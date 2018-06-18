@@ -1,0 +1,27 @@
+{
+  "name": "chelsea-culture-map",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^4.1.1",
+    "esri-leaflet": "^2.1.4",
+    "jquery": "^3.3.1",
+    "leaflet": "^1.3.1",
+    "leaflet.markercluster": "^1.3.0",
+    "leaflet.markercluster.layersupport": "^2.0.1",
+    "popper.js": "^1.14.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babelify": "^8.0.0",
+    "rollup": "^0.60.7",
+    "watchify": "^3.11.0"
+  }
+}

@@ -1,0 +1,11 @@
+//Main
+
+html, body, #content-wrapper, .container-fluid, main{
+  height:100%;
+  width:100%;
+  overflow: hidden;
+}
+
+@import 'components/sidebar';
+@import 'components/map';
+@import 'leaflet/symbology';
