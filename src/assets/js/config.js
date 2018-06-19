@@ -33,5 +33,6 @@ export const category_field = 'TAB_NAME';
  * Relative path where icon png's reside.
  * @type {String}
  */
-export const iconURL = '../assets/icon/0.5x/';
-export const iconExtension = '@0.5x.png'
+export const iconURL = './assets/icon/0.5x/';
+export const iconExtension = '@0.5x.png';
+export const zoomDisableCluster = 18;

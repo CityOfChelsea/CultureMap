@@ -1,9 +1,9 @@
-const $ = require('jquery');
-require('bootstrap');
-require('leaflet');
+// const $ = require('jquery');
+// import 'bootstrap';
+import 'leaflet'
 L.esri = require('esri-leaflet');
-require('leaflet.markercluster');
-require('leaflet.markercluster.layersupport');
+import 'leaflet.markercluster';
+import 'leaflet.markercluster.layersupport';
 
 import {
   base_map_URL,
@@ -12,10 +12,14 @@ import {
   palette,
   category_field,
   iconURL,
-  iconExtension
+  iconExtension,
+  zoomDisableCluster
 } from './config.js';
 
 import * as util from './util.js';
+
+//Show about section on launch
+// $('#aboutModal').modal('show')
 
 // Initialize the Map
 let mymap = L.map('map', {
@@ -45,6 +49,8 @@ let query = L.esri.query({
   url: feature_layer_URL
 }).where("STATUS = 1").run(function(error, featureCollection, response) {
 
+  // $('#aboutModal').modal('show')
+
   //Loop through all the asset categories,
   //creating a layer for each one.
   for (let cat in asset_categories) {
@@ -62,7 +68,7 @@ let query = L.esri.query({
     // Create an empty cluster marker group
     let markers = L.markerClusterGroup.layerSupport({
       iconCreateFunction: catClusterFunction,
-      disableClusteringAtZoom: 18
+      disableClusteringAtZoom: zoomDisableCluster
     });
 
     // Create a layer, filtering for a single
@@ -74,24 +80,24 @@ let query = L.esri.query({
         });
       },
       onEachFeature: (feature, layer) => {
+        feature.layer = layer;
         layer.on('click', () => {
           $("#featureModal .modal-title").html(feature.properties.NAME);
 
           let modal_content = '';
 
-          if (feature.properties.PIC_URL){
+          if (feature.properties.PIC_URL) {
             modal_content += `<img id="featureModalPic" class="mb-3" src="${feature.properties.PIC_URL}">`
           }
-          if (feature.properties.TAB_NAME){
+          if (feature.properties.TAB_NAME) {
             modal_content += `<p>Category: <i>${feature.properties.TAB_NAME}</i></p>`
           }
-          if (feature.properties.DESC1){
+          if (feature.properties.DESC1) {
             modal_content += feature.properties.DESC1
           }
 
           $("#featureModal .modal-body").html(modal_content);
-
-
+          $("#featureModal .learn-more").attr("href", feature.properties.WEBSITE);
           $("#featureModal").modal("show");
         })
       },
@@ -116,7 +122,9 @@ let query = L.esri.query({
     //Add the layer to the layer dictionary
     layers[asset_categories[cat]] = markers;
 
+
   } // End loop that creates layers
+
 
   /***********Layers control***************/
 
@@ -139,48 +147,46 @@ let query = L.esri.query({
   // //Change control icon
   //
   // $(".leaflet-control-layers-toggle").html("<h3>Cultural Asset Categories</h3>")
-  //
-  // /***********Title Control***************/
-  //
-  // ctl.title({
-  //   position: 'topleft'
-  // }).addTo(mymap);
-  //
-  // /***********Search Control***************/
-  //
-  // /**
-  //  * Combines a dictionary of L.markerClusterGroups into an array of L.Layers
-  //  * @param  {A dictionary of L.markerClusterGroups} markerClusterGroups [description]
-  //  * @return {An array of L.Layer}                     [description]
-  //  */
-  // function combineClusterGroups(markerClusterGroups) {
-  //   let all_assets = [];
-  //   for (let markerClusterGroup in markerClusterGroups) {
-  //     let markerGroupAssets = markerClusterGroups[markerClusterGroup].getLayers();
-  //     all_assets = all_assets.concat(markerGroupAssets);
-  //   }
-  //   return all_assets;
-  // }
-  //
-  // let all_assets = combineClusterGroups(layers);
-  // console.log(all_assets)
-  //
-  // //Test Search
-  // const searchCtrl = fuseSearch(all_assets);
-  //
-  // let arch = layers['architecture'];
-  //
-  //
-  // console.log('layer', arch.getLayer(83).fire("click"));
-  //
-  //
-  // searchCtrl.addTo(mymap);
-  // searchCtrl.indexFeatures(response, ['NAME']);
-  //
+
   // /***********Google Translate Control***************/
   //
   // ctl.translator({
   //   position: 'bottomleft'
   // }).addTo(mymap);
 
+
+  //Parse asset data for search plugin
+  const all_assets = []
+  for (let feature of response.features) {
+    feature.properties.LAYER = feature.layer;
+    all_assets.push(feature.properties)
+  }
+
+  // Typeahead
+  $.typeahead({
+    input: '#assetSearch',
+    minLength: 0,
+    order: "asc",
+    display: "NAME",
+    source: {
+      data: all_assets
+    },
+    searchOnFocus: true,
+    callback: {
+      onClick: function(node, query, result) {
+        console.log(result.LAYER);
+        let layer = result.LAYER
+        let latlng = layer._latlng
+        mymap.setView(latlng, zoomDisableCluster, {
+          animate: true,
+          duration: 1
+        });
+        window.setTimeout(function() {
+          layer.fire("click")
+        }, 1000);
+      }
+    },
+    debug: true
+
+  });
 }) // End query.run()

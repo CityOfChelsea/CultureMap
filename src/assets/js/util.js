@@ -25,35 +25,35 @@ export function clusterFunction(category) {
   }
 };
 
-/**
- * Formats popup with information from ArcGIS Online.
- * Fields are currently hard-coded into function.
- * @param  {Leaflet layer} layer [description]
- * @return {string}       HTML string for popup
- */
-export function format_popup(layer) {
-
-  let feature_props = layer.feature.properties;
-  let template = "<h3>{NAME}</h3>"
-
-  if (feature_props['PIC_URL']) {
-    template = template + '<img src={PIC_URL}>';
-  }
-
-  if (feature_props['DESC1']) {
-    template = template + '<p>{DESC1}</p>';
-  }
-
-  if (feature_props['TAB_NAME']) {
-    template = template + '<p><i>Category: {TAB_NAME}</p></i>';
-  }
-
-  if (feature_props['WEBSITE']) {
-    template = template + '<a href={WEBSITE} class="button small special">More info</a>';
-  }
-
-  return L.Util.template(template, layer.feature.properties);
-}
+// /**
+//  * Formats popup with information from ArcGIS Online.
+//  * Fields are currently hard-coded into function.
+//  * @param  {Leaflet layer} layer [description]
+//  * @return {string}       HTML string for popup
+//  */
+// export function format_popup(layer) {
+//
+//   let feature_props = layer.feature.properties;
+//   let template = "<h3>{NAME}</h3>"
+//
+//   if (feature_props['PIC_URL']) {
+//     template = template + '<img src={PIC_URL}>';
+//   }
+//
+//   if (feature_props['DESC1']) {
+//     template = template + '<p>{DESC1}</p>';
+//   }
+//
+//   if (feature_props['TAB_NAME']) {
+//     template = template + '<p><i>Category: {TAB_NAME}</p></i>';
+//   }
+//
+//   if (feature_props['WEBSITE']) {
+//     template = template + '<a href={WEBSITE} class="button small special">More info</a>';
+//   }
+//
+//   return L.Util.template(template, layer.feature.properties);
+// }
 
 /**
  * Exchanges dictionary keys for values
