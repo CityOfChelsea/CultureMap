@@ -24,15 +24,20 @@
 
 <body>
 
-  <nav class="navbar position-fixed fixed-top navbar-expand-lg navbar-dark bg-dark justify-content-between">
+  <nav class="navbar position-fixed fixed-top navbar-expand-lg navbar-dark bg-dark">
 
     <a class="navbar-brand" href="#">Chelsea CultureMap</a>
-
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+    <!--Menu toggle-->
+    <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+    <!-- Search toggle -->
+    <button class="navbar-toggler ml-1" type="button" data-toggle="collapse" data-target="#searchCollapse" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="oi oi-magnifying-glass"></span>
+    </button>
 
-    <div class="collapse navbar-collapse" id="navbarToggler">
+    <!-- Menu -->
+    <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
         <li class="nav-item active mx-md-1">
           <a href="#" class="nav-link" data-toggle="modal" data-target="#aboutModal">About</a>
@@ -53,33 +58,32 @@
           <a class="nav-link" href="#">Cultural Asset List</a>
         </li>
       </ul>
-
     </div>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#searchToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="oi oi-magnifying-glass"></span>
-    </button>
+    <!-- Search -->
+    <div class="navbar-collapse collapse" id="searchCollapse">
 
-    <div class="collapse navbar-collapse" id="searchToggler">
-      <form class="form-inline">
-        <div class="typeahead__container">
-          <div class="typeahead__field">
+        <form class="ml-auto">
+          <div class="typeahead__container">
+            <div class="typeahead__field">
 
-            <span class="typeahead__query">
-                  <input id="assetSearch"
-                         name="q"
-                         type="search"
-                         autocomplete="off"placeholder="Search for cultural assets">
-              </span>
-            <span class="typeahead__button">
-                  <button type="submit">
-                      <span class="typeahead__search-icon"></span>
-            </button>
+              <span class="typeahead__query">
+                <input id="assetSearch"
+                       name="q"
+                       type="search"
+                       autocomplete="off"placeholder="Search for cultural assets">
             </span>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
     </div>
+
+
+
+
+
+
+
   </nav>
   <!--End navbar-->
 
