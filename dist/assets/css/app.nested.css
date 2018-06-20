@@ -6439,34 +6439,7 @@ input#assetSearch {
 
 /***Google Translat Styling**/
 .goog-te-banner-frame {
-  display: none; }
+  display: none !important; }
 
 #google_translate_element {
-  margin-bottom: 0; }
-  #google_translate_element .goog-te-gadget-simple {
-    border-width: 0px;
-    border-color: #444444;
-    padding: 0px;
-    border-radius: 5px;
-    background-color: #343a40; }
-  #google_translate_element .goog-te-menu-value {
-    font-family: "Arvo";
-    font-size: 1rem;
-    color: white;
-    margin: 0px;
-    padding: 0px; }
-    #google_translate_element .goog-te-menu-value span > span {
-      border-width: 0px;
-      margin: 0px; }
-  #google_translate_element img {
-    visibility: hidden;
-    width: 0;
-    margin: 0; }
-  #google_translate_element .goog-te-menu-value span {
-    margin-right: 5px; }
-
-.goog-te-menu2 table {
-  background-color: black; }
-
-.goog-te-menu-value span:nth-child(3) {
-  border: none !important; }
+  display: none !important; }

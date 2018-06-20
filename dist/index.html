@@ -25,6 +25,9 @@
 
 <body>
 
+  <!--Hidden  -->
+  <div id="google_translate_element"></div>
+
   <nav class="navbar position-fixed fixed-top navbar-expand-lg navbar-dark bg-dark px-2">
 
 
@@ -45,8 +48,8 @@
 
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-        <li class="nav-item nav-link mx-md-1">
-          <div id="google_translate_element" ></div>
+        <li class="nav-item mx-md-1">
+          <a href="" class="nav-link" id="languageLink"><span class="notranslate">Español</span></a>
         </li>
         <li class="nav-item  mx-md-1">
           <a href="#" class="nav-link" data-toggle="modal" data-target="#aboutModal">About</a>
@@ -149,23 +152,70 @@
     </div>
   </div>
 
+
+
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
   <script src="assets/js/jquery.typeahead.min.js" charset="utf-8"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   <script src="assets/js/bundle.js" charset="utf-8"></script>
 
-
+  <!-- Google Translate Widget -->
   <script type="text/javascript">
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
         pageLanguage: 'en',
-        includedLanguages: 'en,es',
+        includedLanguages: 'es',
         layout: google.translate.TranslateElement.InlineLayout.SIMPLE
       }, 'google_translate_element');
     }
   </script>
   <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <!-- <script type="text/javascript">
+    // $('document').ready(function{
+    /**
+     * Switches the language link in the navbar,
+     * according to google translate cookie
+     * @return null
+     */
+    function switchLangLink() {
+      $('document').ready(() => {
+        if (Cookies.get('googtrans') == '/en/en') {
+          $("#languageLink>span").html("Español")
+        } else {
+          $("#languageLink>span").html("English")
+        }
+      })
+    }
+
+    /**
+     * Sets the google translate cookie to English or Spanish
+     * @return null
+     */
+    function switchGoogleTransCookie() {
+      $('#languageLink').on('click', () => {
+
+        if (Cookies.get('googtrans') == '/en/en') {
+          Cookies.set('googtrans', '/en/es');
+          location.reload();
+        } else {
+          Cookies.set('googtrans', '/en/en');
+          location.reload();
+        }
+
+      })
+    }
+
+    switchLangLink();
+    switchGoogleTransCookie();
+
+
+    // })
+  </script> -->
+
 </body>
 
 </html>
