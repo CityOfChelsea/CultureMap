@@ -1,5 +1,5 @@
-// const $ = require('jquery');
-// import 'bootstrap';
+//External dependencies include JQuery and Bootstrap
+
 import 'leaflet'
 L.esri = require('esri-leaflet');
 import 'leaflet.markercluster';
@@ -35,7 +35,7 @@ let zoom = new L.Control.Zoom({
 mymap.setView([42.39, -71.035], 16);
 
 // Add the basemap
-L.tileLayer(base_map_URL, {
+const basemap = L.tileLayer(base_map_URL, {
   maxZoom: 20
 }).addTo(mymap);
 
@@ -165,7 +165,7 @@ let query = L.esri.query({
   // Typeahead
   $.typeahead({
     input: '#assetSearch',
-    minLength: 0,
+    minLength: 1,
     order: "asc",
     display: "NAME",
     source: {
@@ -174,19 +174,89 @@ let query = L.esri.query({
     searchOnFocus: true,
     callback: {
       onClick: function(node, query, result) {
-        console.log(result.LAYER);
         let layer = result.LAYER
         let latlng = layer._latlng
         mymap.setView(latlng, zoomDisableCluster, {
           animate: true,
           duration: 1
         });
-        window.setTimeout(function() {
+
+        let highlight = L.circle(latlng, {
+          radius: 10,
+          weight: 5,
+          color: '#ffc107',
+          fill: false
+        }).addTo(mymap);
+
+
+        window.setTimeout(() => {
           layer.fire("click")
         }, 1000);
+
+
+        $('#featureModal').on('hidden.bs.modal', () => {
+          if (highlight) {
+            highlight.remove()
+          }
+        })
       }
     },
     debug: true
 
   });
+
+
+
 }) // End query.run()
+
+
+
+// RESTYLE THE DROPDOWN MENU
+$('#google_translate_element').on("click", function() {
+
+  // Change font family and color
+  $("iframe").contents().find(".goog-te-menu2-item div, .goog-te-menu2-item:link div, .goog-te-menu2-item:visited div, .goog-te-menu2-item:active div, .goog-te-menu2 *")
+    .css({
+      'color': 'black',
+      'font-family': 'Arvo',
+      'width': '100%'
+    });
+  // Change menu's padding
+  $("iframe").contents().find('.goog-te-menu2-item-selected').css('display', 'none');
+
+  // Change menu's padding
+  // $("iframe").contents().find('.goog-te-menu2').css('padding', '0px');
+
+  // Change the padding of the languages
+  // $("iframe").contents().find('.goog-te-menu2-item div').css('padding', '20px');
+
+  // Change the width of the languages
+  // $("iframe").contents().find('.goog-te-menu2-item').css('width', '100%');
+  // $("iframe").contents().find('td').css('width', '100%');
+
+  // Change hover effects
+  $("iframe").contents().find(".goog-te-menu2-item div").hover(function() {
+    $(this).css('background-color', '#4385F5').find('span.text').css('color', 'white');
+  }, function() {
+    $(this).css('background-color', 'white').find('span.text').css('color', '#544F4B');
+  });
+
+  // Change Google's default blue border
+  $("iframe").contents().find('.goog-te-menu2').css('border', 'none');
+
+  // Change the iframe's box shadow
+  $(".goog-te-menu-frame").css('box-shadow', '0 0px 0px 0px rgba(0, 0, 0, 0.0), 0 0px 0px 0px rgba(0, 0, 0, 0.0), 0 0px 0px 0px rgba(0, 0, 0, 0.0)');
+
+
+
+  // Change the iframe's size and position?
+  $(".goog-te-menu-frame").css({
+    'height': '100%',
+    'width': '100%'
+  });
+  // Change iframes's size
+  $("iframe").contents().find('.goog-te-menu2').css({
+    'height': '100%',
+    'width': '100%'
+  });
+});
