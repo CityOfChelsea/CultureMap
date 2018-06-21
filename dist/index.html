@@ -17,6 +17,8 @@
   <!-- FONTS -->
   <link href="https://fonts.googleapis.com/css?family=Arvo:400,700" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Montserrat:300" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
 
   <link rel="stylesheet" href="assets/css/jquery.typeahead.min.css">
   <link rel="stylesheet" href="assets/css/open-iconic-bootstrap.css">
@@ -48,26 +50,23 @@
 
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-        <li class="nav-item mx-md-1">
-          <a href="" class="nav-link" id="languageLink"><span class="notranslate">Español</span></a>
+        <li class="nav-item ml-md-2 mr-md-1 py-md-auto">
+          <a href="" class="nav-link" id="languageLink"><button class="btn btn-outline-light" type="button"><span class="notranslate">Español</span></button></a>
         </li>
-        <li class="nav-item  mx-md-1">
-          <a href="#" class="nav-link" data-toggle="modal" data-target="#aboutModal">About</a>
+        <li class="nav-item d-flex align-items-center">
+          <a href="#" class="nav-link" data-toggle="modal" data-target="#aboutModal"><i class="material-icons md-18 align-middle notranslate">help</i> About</a>
         </li>
-        <li class="nav-item  mx-md-1">
-          <a href="https://arcg.is/0XGP9S" target="_blank" class="nav-link"><span class="oi oi-map-marker"></span> Add an asset</a>
+        <li class="nav-item d-flex align-items-center">
+          <a href="https://arcg.is/0XGP9S" target="_blank" class="nav-link"><i class="material-icons md-18 align-middle notranslate">location_on</i> Add an asset</a>
         </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown d-flex align-items-center">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-         <span class="oi oi-wrench"></span> Tools
+         <i class="material-icons md-18 align-middle notranslate">build</i> Tools
        </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="#">Legend</a>
             <a class="dropdown-item" href="#">Historic Districts</a>
           </div>
-        </li>
-        <li class="nav-item">
-          <a id="assetListToggle" class="nav-link" href="#">Cultural Asset List</a>
         </li>
       </ul>
     </div>

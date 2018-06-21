@@ -6,9 +6,9 @@
 export function switchLangLink() {
   $('document').ready(() => {
     if (Cookies.get('googtrans') == '/en/en') {
-      $("#languageLink>span").html("Español")
+      $("#languageLink>button>span").html("Español")
     } else {
-      $("#languageLink>span").html("English")
+      $("#languageLink>button>span").html("English")
     }
   })
 }
