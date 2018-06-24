@@ -4,43 +4,11 @@
   bottom: 0;
   left: 0;
   z-index: 100;
-  /* Behind the navbar */
-  padding: 48px 0 0;
-  /* Height of navbar */
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1); }
+  /* Behind the navbar */ }
 
-.sidebar-sticky {
-  position: relative;
-  top: 0;
-  height: calc(100vh - 48px);
-  padding-top: .5rem;
-  overflow-x: hidden;
-  overflow-y: auto;
-  /* Scrollable contents if viewport is shorter than content. */ }
-
-@supports (position: -webkit-sticky) or (position: sticky) {
-  .sidebar-sticky {
-    position: -webkit-sticky;
-    position: sticky; } }
-
-.sidebar .nav-link {
-  font-weight: 500;
-  color: #333; }
-
-.sidebar .nav-link .feather {
-  margin-right: 4px;
-  color: #999; }
-
-.sidebar .nav-link.active {
-  color: #007bff; }
-
-.sidebar .nav-link:hover .feather,
-.sidebar .nav-link.active .feather {
-  color: inherit; }
-
-.sidebar-heading {
-  font-size: .75rem;
-  text-transform: uppercase; }
+#sidebar-body {
+  overflow-y: scroll;
+  height: calc(100vh - 48px); }
 
 [role="main"] {
   padding-top: 48px;
@@ -48,7 +16,8 @@
 
 div#map {
   height: 100%;
-  width: auto; }
+  width: auto;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5); }
 
 #featureModalPic {
   width: 100%; }
@@ -6497,7 +6466,7 @@ html,
       padding: 56px 0px 0px; } }
 
 .modal-title,
-nav {
+nav, .sidebar h5 {
   font-family: "Arvo"; }
 
 input#assetSearch {

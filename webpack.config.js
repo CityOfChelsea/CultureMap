@@ -21,5 +21,6 @@ module.exports = {
         presets: ['env']
       }
     }]
-  }
+  },
+  mode: 'development'
 };

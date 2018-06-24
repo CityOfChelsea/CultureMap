@@ -17,8 +17,7 @@
   <!-- FONTS -->
   <link href="https://fonts.googleapis.com/css?family=Arvo:400,700" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Montserrat:300" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   <link rel="stylesheet" href="assets/css/jquery.typeahead.min.css">
   <link rel="stylesheet" href="assets/css/open-iconic-bootstrap.css">
@@ -46,7 +45,6 @@
     </button>
 
     <!-- Menu -->
-
 
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
@@ -92,15 +90,25 @@
   </nav>
   <!--End navbar-->
 
-  <div id="main"   class="container-fluid px-0">
+  <div id="main" class="container-fluid px-0">
 
     <div id="content-wrapper" class="row mx-0">
 
-      <div class="sidebar col-md-2 d-none d-md-block bg-light">
-        <h3 class="m-3">Asset list to go here</h3>
+      <div class="sidebar col-md-2 col-lg-3 d-none d-md-block bg-light">
+        <div id="sidebar-title">
+          <h5 class="m-3 align-left">Displayed cultural assets</h5>
+        </div>
+        <div id="sidebar-body">
+          <table class="table" id="currently-displayed">
+            <thead class="hidden"></thead>
+            <tbody class="list">
+
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <main class="col-md-9 ml-sm-auto col-lg-10 px-0">
+      <main class="col-md-9 ml-sm-auto col-lg-9 px-0">
         <div id="map"></div>
       </main>
 

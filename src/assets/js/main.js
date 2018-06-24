@@ -18,6 +18,7 @@ import {
 
 import * as util from './util.js';
 import * as goog from './goog.js';
+import * as sidebar from './sidebar.js';
 
 //Show about section on launch
 // $('#aboutModal').modal('show')
@@ -72,8 +73,6 @@ let query = L.esri.query({
       disableClusteringAtZoom: zoomDisableCluster
     });
 
-
-
     // Create a layer, filtering for a single
     // Asset category
     let mylayer = L.geoJSON(response, {
@@ -114,17 +113,13 @@ let query = L.esri.query({
     })
 
     //Add the layer to the cluster group
-    // mylayer.bindPopup(popup)
     markers.addLayer(mylayer)
-    // markers.bindPopup(popup)
 
     //Add the cluster group to the map
-    // mymap.addLayer(markers)
     mymap.addLayer(markers)
 
     //Add the layer to the layer dictionary
     layers[asset_categories[cat]] = markers;
-
 
   } // End loop that creates layers
 
@@ -173,7 +168,7 @@ let query = L.esri.query({
       onClick: function(node, query, result) {
         let layer = result.LAYER
         let latlng = layer._latlng
-        mymap.setView(latlng, zoomDisableCluster, {
+        mymap.flyTo(latlng, zoomDisableCluster, {
           animate: true,
           duration: 1
         });
@@ -186,10 +181,11 @@ let query = L.esri.query({
         }).addTo(mymap);
 
 
-        window.setTimeout(() => {
-          layer.fire("click")
-        }, 1000);
-
+        mymap.once("moveend", () => {
+          window.setTimeout(() => {
+            layer.fire("click")
+          }, 300);
+        });
 
         $('#featureModal').on('hidden.bs.modal', () => {
           if (highlight) {
@@ -202,26 +198,19 @@ let query = L.esri.query({
 
   });
 
-//Sidebar
+  //Sidebar
 
-const all_layers = [];
-for (let feature of response.features) {
-  all_layers.push(feature.layer);
-}
+  //Sync sidebar, listening for map move, zoom, or filtering layers
+  sidebar.sync(mymap, layers);
+  mymap.on('moveend zoomend overlayremove overlayadd', () => sidebar.sync(mymap, layers));
 
-function getCurrentlyDisplayed(map, layers){
-  let currentlyDisplayed = []
-  for (let layer of layers) {
-    // if (map.hasLayer(layer)) {
-      if (map.getBounds().contains(layer.getLatLng())) {
-        currentlyDisplayed.push(layer)
-      // }
-    }
-  }
-  console.log(currentlyDisplayed.length);
-}
-
-mymap.on('move',() => getCurrentlyDisplayed(mymap, all_layers));
+  $(document).on("click", ".feature-row", function(e) {
+    // $(document).off("mouseout", ".feature-row", clearHighlight);
+    sidebar.click(parseInt($(this).attr("id"), 10),
+      mymap,
+      layers,
+      zoomDisableCluster);
+  });
 
 }) // End query.run()
 

@@ -32,7 +32,6 @@ html,
   overflow: hidden;
 }
 
-
 //Adjust top padding of main content according to
 //Navbar height.
 #main {
@@ -44,7 +43,7 @@ html,
 
 
 .modal-title,
-nav {
+nav, .sidebar h5 {
   font-family: $font-family-header;
 }
 
