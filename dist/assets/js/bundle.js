@@ -20922,12 +20922,13 @@ var _sidebar = __webpack_require__(/*! ./sidebar.js */ "./src/assets/js/sidebar.
 
 var sidebar = _interopRequireWildcard(_sidebar);
 
+var _typeahead = __webpack_require__(/*! ./typeahead.js */ "./src/assets/js/typeahead.js");
+
+var typeahead = _interopRequireWildcard(_typeahead);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 L.esri = __webpack_require__(/*! esri-leaflet */ "./node_modules/esri-leaflet/dist/esri-leaflet-debug.js"); //External dependencies include JQuery and Bootstrap
-
-//Show about section on launch
-// $('#aboutModal').modal('show')
 
 // Initialize the Map
 var mymap = L.map('map', {
@@ -20940,12 +20941,26 @@ var zoom = new L.Control.Zoom({
   position: 'bottomright'
 }).addTo(mymap);
 
+//Initial map view
 mymap.setView([42.39, -71.035], 16);
 
 // Add the basemap
 var basemap = L.tileLayer(_config.base_map_URL, {
   maxZoom: 20
 }).addTo(mymap);
+
+//Add highlight layer
+var highlight = L.geoJson(null);
+var highlightStyle = {
+  stroke: true,
+  color: "#F25C05",
+  weight: 5,
+  opacity: 0.7,
+  fillColor: "#F25C05",
+  fillOpacity: 0.3,
+  radius: 15
+};
+highlight.addTo(mymap);
 
 // Dictionary for storing all layers.
 var layers = {};
@@ -21095,32 +21110,12 @@ var query = L.esri.query({
     },
     searchOnFocus: true,
     callback: {
+      // onReady: () => $('#assetSearch').on('enter',(event) => event.preventDefault()),
       onClick: function onClick(node, query, result) {
-        var layer = result.LAYER;
-        var latlng = layer._latlng;
-        mymap.flyTo(latlng, _config.zoomDisableCluster, {
-          animate: true,
-          duration: 1
-        });
-
-        var highlight = L.circle(latlng, {
-          radius: 10,
-          weight: 5,
-          color: '#ffc107',
-          fill: false
-        }).addTo(mymap);
-
-        mymap.once("moveend", function () {
-          window.setTimeout(function () {
-            layer.fire("click");
-          }, 300);
-        });
-
-        $('#featureModal').on('hidden.bs.modal', function () {
-          if (highlight) {
-            highlight.remove();
-          }
-        });
+        return typeahead.search(node, query, result, mymap, _config.zoomDisableCluster);
+      },
+      onSubmit: function onSubmit(node, query, result) {
+        return typeahead.search(node, query, result, mymap, _config.zoomDisableCluster);
       }
     },
     debug: true
@@ -21139,6 +21134,19 @@ var query = L.esri.query({
     // $(document).off("mouseout", ".feature-row", clearHighlight);
     sidebar.click(parseInt($(this).attr("id"), 10), mymap, layers, _config.zoomDisableCluster);
   });
+
+  if (!("ontouchstart" in window)) {
+    $(document).on("mouseover", ".feature-row", function (e) {
+      highlight.clearLayers().addLayer(L.circleMarker([$(this).attr("lat"), $(this).attr("lng")], highlightStyle));
+      console.log(highlight);
+    });
+  }
+
+  $(document).on("mouseout", ".feature-row", clearHighlight);
+
+  function clearHighlight() {
+    highlight.clearLayers();
+  }
 }); // End query.run()
 
 // Google Translat layer_widget
@@ -21153,9 +21161,111 @@ goog.switchGoogleTransCookie();
   !*** ./src/assets/js/sidebar.js ***!
   \**********************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: Unexpected token, expected { (46:0)\n\n\u001b[0m \u001b[90m 44 | \u001b[39m\n \u001b[90m 45 | \u001b[39m\u001b[36mexport\u001b[39m \u001b[36mfunction\u001b[39m hover()\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 46 | \u001b[39m\n \u001b[90m    | \u001b[39m\u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n");
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.sync = sync;
+exports.click = click;
+exports.hover = hover;
+/**
+ * Gets layers currently displayed on map
+ * @param  {L.map} map
+ * @param  {dictionary} layerGroups A dictionary of L.markerClusterGroup values
+ * @return {array}             Array of displayed layers
+ */
+function sync(mymap, layerGroups) {
+
+  var currentlyDisplayed = [];
+
+  $("#currently-displayed tbody").empty();
+
+  for (var group in layerGroups) {
+    if (mymap.hasLayer(layerGroups[group])) {
+      var layers = layerGroups[group]._layers;
+      for (var _layer in layers) {
+        var layer = layers[_layer];
+        if (mymap.getBounds().contains(layer.getLatLng())) {
+          $('#currently-displayed tbody').append("<tr id=" + L.stamp(layer) + " class=\"feature-row\" lat=\"" + layer.getLatLng().lat + "\" lng=\"" + layer.getLatLng().lng + "\"><td>" + layer.feature.properties.NAME + "</td></tr");
+        }
+      }
+    }
+  }
+}
+
+function click(id, mymap, layerGroups, zoom) {
+  for (var group in layerGroups) {
+    if (mymap.hasLayer(layerGroups[group])) {
+      var layers = layerGroups[group]._layers;
+      if (id in layers) {
+        var _ret = function () {
+          var layer = layers[id];
+          var latlng = layer.getLatLng();
+
+          mymap.once("moveend", function () {
+            layer.fire("click");
+          });
+          mymap.flyTo(latlng, zoom);
+
+          return "break";
+        }();
+
+        if (_ret === "break") break;
+      }
+    }
+  }
+}
+
+function hover() {}
+
+/***/ }),
+
+/***/ "./src/assets/js/typeahead.js":
+/*!************************************!*\
+  !*** ./src/assets/js/typeahead.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.search = search;
+function search(node, query, result, mymap, zoomDisableCluster) {
+  console.log('query', query);
+  var layer = result.LAYER;
+  var latlng = layer._latlng;
+  mymap.flyTo(latlng, zoomDisableCluster, {
+    animate: true,
+    duration: 1
+  });
+
+  var highlight = L.circle(latlng, {
+    radius: 10,
+    weight: 5,
+    color: '#ffc107',
+    fill: false
+  }).addTo(mymap);
+
+  mymap.once("moveend", function () {
+    window.setTimeout(function () {
+      layer.fire("click");
+    }, 450);
+  });
+
+  $('#featureModal').on('hidden.bs.modal', function () {
+    if (highlight) {
+      highlight.remove();
+    }
+  });
+}
 
 /***/ }),
 

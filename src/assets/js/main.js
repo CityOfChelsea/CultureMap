@@ -19,9 +19,7 @@ import {
 import * as util from './util.js';
 import * as goog from './goog.js';
 import * as sidebar from './sidebar.js';
-
-//Show about section on launch
-// $('#aboutModal').modal('show')
+import * as typeahead from './typeahead.js'
 
 // Initialize the Map
 let mymap = L.map('map', {
@@ -34,12 +32,26 @@ let zoom = new L.Control.Zoom({
   position: 'bottomright'
 }).addTo(mymap);
 
+//Initial map view
 mymap.setView([42.39, -71.035], 16);
 
 // Add the basemap
 const basemap = L.tileLayer(base_map_URL, {
   maxZoom: 20
 }).addTo(mymap);
+
+//Add highlight layer
+let highlight = L.geoJson(null);
+const highlightStyle = {
+  stroke: true,
+  color: "#F25C05",
+  weight: 5,
+  opacity:0.7,
+  fillColor: "#F25C05",
+  fillOpacity: 0.3,
+  radius: 15
+};
+highlight.addTo(mymap);
 
 // Dictionary for storing all layers.
 let layers = {};
@@ -165,34 +177,9 @@ let query = L.esri.query({
     },
     searchOnFocus: true,
     callback: {
-      onClick: function(node, query, result) {
-        let layer = result.LAYER
-        let latlng = layer._latlng
-        mymap.flyTo(latlng, zoomDisableCluster, {
-          animate: true,
-          duration: 1
-        });
-
-        let highlight = L.circle(latlng, {
-          radius: 10,
-          weight: 5,
-          color: '#ffc107',
-          fill: false
-        }).addTo(mymap);
-
-
-        mymap.once("moveend", () => {
-          window.setTimeout(() => {
-            layer.fire("click")
-          }, 300);
-        });
-
-        $('#featureModal').on('hidden.bs.modal', () => {
-          if (highlight) {
-            highlight.remove()
-          }
-        })
-      }
+      // onReady: () => $('#assetSearch').on('enter',(event) => event.preventDefault()),
+      onClick: (node, query, result) => typeahead.search(node, query, result, mymap, zoomDisableCluster),
+      onSubmit: (node, query, result) => typeahead.search(node, query, result, mymap, zoomDisableCluster)
     },
     debug: true
 
@@ -211,6 +198,19 @@ let query = L.esri.query({
       layers,
       zoomDisableCluster);
   });
+
+  if ( !("ontouchstart" in window) ) {
+    $(document).on("mouseover", ".feature-row", function(e) {
+      highlight.clearLayers().addLayer(L.circleMarker([$(this).attr("lat"), $(this).attr("lng")], highlightStyle));
+      console.log(highlight)
+    });
+  }
+
+  $(document).on("mouseout", ".feature-row", clearHighlight);
+
+  function clearHighlight() {
+    highlight.clearLayers();
+  }
 
 }) // End query.run()
 

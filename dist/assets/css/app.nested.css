@@ -5,6 +5,8 @@
   left: 0;
   z-index: 100;
   /* Behind the navbar */ }
+  .sidebar table td {
+    padding-left: 0px; }
 
 #sidebar-body {
   overflow-y: scroll;
@@ -6460,7 +6462,7 @@ html,
   overflow: hidden; }
 
 #main {
-  padding: 68px 0 0; }
+  padding: 86px 0 0; }
   @media screen and (max-width: 540px) {
     #main {
       padding: 56px 0px 0px; } }

@@ -16,7 +16,7 @@ export function sync(mymap, layerGroups) {
       for (let _layer in layers) {
         let layer = layers[_layer];
         if (mymap.getBounds().contains(layer.getLatLng())) {
-          $('#currently-displayed tbody').append(`<tr id=${L.stamp(layer)} class="feature-row"><td>${layer.feature.properties.NAME}</td></tr`)
+          $('#currently-displayed tbody').append(`<tr id=${L.stamp(layer)} class="feature-row" lat="${layer.getLatLng().lat}" lng="${layer.getLatLng().lng}"><td>${layer.feature.properties.NAME}</td></tr`)
         }
       }
     }
@@ -42,4 +42,6 @@ export function click(id, mymap, layerGroups, zoom){
   }
 }
 
-export function hover()
+export function hover(){
+
+}

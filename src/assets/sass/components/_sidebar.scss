@@ -7,6 +7,9 @@
   left: 0;
   z-index: 100; /* Behind the navbar */
 
+  table td {
+    padding-left: 0px;
+  }
 }
 
 #sidebar-body {
