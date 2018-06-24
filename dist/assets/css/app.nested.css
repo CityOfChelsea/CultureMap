@@ -24,6 +24,14 @@ div#map {
 #featureModalPic {
   width: 100%; }
 
+.modal h1,
+.modal h2,
+.modal h3,
+.modal h4,
+.modal h5,
+.modal h6 {
+  font-family: "Arvo"; }
+
 .cluster {
   background: #2d84c8;
   border-radius: 50%;

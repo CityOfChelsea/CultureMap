@@ -120,16 +120,20 @@
 
   <!-- About Modal -->
   <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Welcome to the Chelsea CultureMap!</h5>
+          <h4 class="modal-title">Welcome to Chelsea CultureMap!</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
         </div>
         <div class="modal-body">
-          ...
+          <h5>What is Chelsea CultureMap?</h5>
+          <p>The City of Chelsea is a community with a rich history, unique culture, and creative people. <b>Chelsea CultureMap</b> aims to identify, celebrate, and protect the places and resources important to the City's identity, culture, and creativity. You can use the map to explore currently identified cultural assets, or take the <a href="https://arcg.is/0XGP9S" target="_blank">survey</a> to identify other assets that you think should be included on the map.</p>
+          <h5>What is a cultural asset?</h5>
+          <p>A cultural asset is something that contributes to the community's creativity, knowledge, traditions, and meaning. A cultural asset can be a physical thing, like a building or piece of art. It can also be something intangible and temporary, like
+            an event, ritual, or ceremony.</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -164,7 +168,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   <script type="text/javascript">
     //Show about section on launch
-    // $('#aboutModal').modal('show')
+    $('#aboutModal').modal('show')
   </script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
   <script src="assets/js/jquery.typeahead.min.js" charset="utf-8"></script>
