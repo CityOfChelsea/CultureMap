@@ -8,7 +8,7 @@ export function sync(mymap, layerGroups) {
 
   let currentlyDisplayed = [];
 
-  $("#currently-displayed tbody").empty();
+  $("#currently-displayed").empty();
 
   for (let group in layerGroups) {
     if (mymap.hasLayer(layerGroups[group])) {
@@ -16,7 +16,8 @@ export function sync(mymap, layerGroups) {
       for (let _layer in layers) {
         let layer = layers[_layer];
         if (mymap.getBounds().contains(layer.getLatLng())) {
-          $('#currently-displayed tbody').append(`<tr id=${L.stamp(layer)} class="feature-row" lat="${layer.getLatLng().lat}" lng="${layer.getLatLng().lng}"><td>${layer.feature.properties.NAME}</td></tr`)
+          $('#currently-displayed').append(`<a id=${L.stamp(layer)} class="feature-row list-group-item bg-light px-0" lat="${layer.getLatLng().lat}" lng="${layer.getLatLng().lng}">${layer.feature.properties.NAME}</a>`)
+          // $('#currently-displayed tbody').append(`<tr id=${L.stamp(layer)} class="feature-row" lat="${layer.getLatLng().lat}" lng="${layer.getLatLng().lng}"><td>${layer.feature.properties.NAME}</td></tr`)
         }
       }
     }
