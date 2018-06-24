@@ -72,6 +72,8 @@ let query = L.esri.query({
       disableClusteringAtZoom: zoomDisableCluster
     });
 
+
+
     // Create a layer, filtering for a single
     // Asset category
     let mylayer = L.geoJSON(response, {
@@ -129,24 +131,24 @@ let query = L.esri.query({
 
   /***********Layers control***************/
 
-  // // Swap out html-safe asset category labels for readable labels
-  // let asset_categories_inverted = util.invert_dict(asset_categories);
-  // let label_friendly_layers = util.label_friendly_layers(layers, asset_categories_inverted);
-  // let layer_widget = L.control.layers(null, label_friendly_layers).addTo(mymap);
-  //
-  // //Adjust colors of layer layer_widget
-  // let palette_readable = {}
-  // for (let key in palette) {
-  //   palette_readable[asset_categories_inverted[key]] = palette[key]
-  // }
-  //
-  // for (let key in palette_readable) {
-  //   let selector_string = "div.leaflet-control-layers-overlays span:contains('" + key + "')"
-  //   $(selector_string).closest("div").css("background-color", palette_readable[key]);
-  // }
-  //
-  // //Change control icon
-  //
+  // Swap out html-safe asset category labels for readable labels
+  let asset_categories_inverted = util.invert_dict(asset_categories);
+  let label_friendly_layers = util.label_friendly_layers(layers, asset_categories_inverted);
+  let layer_widget = L.control.layers(null, label_friendly_layers).addTo(mymap);
+
+  //Adjust colors of layer layer_widget
+  let palette_readable = {}
+  for (let key in palette) {
+    palette_readable[asset_categories_inverted[key]] = palette[key]
+  }
+
+  for (let key in palette_readable) {
+    let selector_string = "div.leaflet-control-layers-overlays span:contains('" + key + "')"
+    $(selector_string).closest("div").css("background-color", palette_readable[key]);
+  }
+
+  //Change control icon
+
   // $(".leaflet-control-layers-toggle").html("<h3>Cultural Asset Categories</h3>")
 
 
@@ -199,6 +201,27 @@ let query = L.esri.query({
     debug: true
 
   });
+
+//Sidebar
+
+const all_layers = [];
+for (let feature of response.features) {
+  all_layers.push(feature.layer);
+}
+
+function getCurrentlyDisplayed(map, layers){
+  let currentlyDisplayed = []
+  for (let layer of layers) {
+    // if (map.hasLayer(layer)) {
+      if (map.getBounds().contains(layer.getLatLng())) {
+        currentlyDisplayed.push(layer)
+      // }
+    }
+  }
+  console.log(currentlyDisplayed.length);
+}
+
+mymap.on('move',() => getCurrentlyDisplayed(mymap, all_layers));
 
 }) // End query.run()
 

@@ -2,14 +2,22 @@
 //Bootstrap variable overides
 $font-family-header: 'Arvo';
 $font-family-sans-serif: 'Montserrat';
-//Testing
+
+//Other vars
+
+
+// Import custom components
 @import 'components/sidebar';
 @import 'components/map';
 @import 'components/modals';
 @import 'leaflet/symbology';
-// Required
+@import 'leaflet/layer_control';
+
+// Import bootstrap
 @import "../../../node_modules/bootstrap/scss/bootstrap";
 
+// Need to position body top at 0px to prevent
+// Google widget from pushing contents down
 body {
   top:0px!important;
 }
@@ -18,11 +26,22 @@ body {
 .container-fluid,
 body,
 html,
-main {
+#main {
   height: 100%;
   width: 100%;
   overflow: hidden;
 }
+
+
+//Adjust top padding of main content according to
+//Navbar height.
+#main {
+  @media screen and (max-width: 540px) {
+    padding: 56px 0px 0px; //mobile
+  }
+  padding: 68px 0 0; //Full size
+}
+
 
 .modal-title,
 nav {
@@ -32,7 +51,9 @@ nav {
 input#assetSearch {
   font-family: $font-family-sans-serif;
 }
-/***Google Translat Styling**/
+
+
+//Hide Google translate widget and banner
 .goog-te-banner-frame {
   display: none!important;
 }
@@ -40,7 +61,6 @@ input#assetSearch {
 #google_translate_element {
   display:none!important;
 }
-
 
 /* Rules for sizing the icon. */
 .material-icons.md-18 { font-size: 18px; }

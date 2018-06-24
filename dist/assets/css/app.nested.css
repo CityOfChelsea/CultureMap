@@ -137,6 +137,63 @@ div[class*="digits-3"]:before {
   background: #62358C;
   border: 1px solid #62358C; }
 
+div.leaflet-control-layers-expanded {
+  padding: 0;
+  border-color: black;
+  width: 215  px; }
+
+.leaflet-control-layers,
+.leaflet-control-layers-expanded {
+  font-family: "Arvo";
+  background-color: #000000;
+  border-width: 0;
+  padding: 0;
+  border: 0; }
+  .leaflet-control-layers h1,
+  .leaflet-control-layers h2,
+  .leaflet-control-layers h3,
+  .leaflet-control-layers h4,
+  .leaflet-control-layers h5,
+  .leaflet-control-layers-expanded h1,
+  .leaflet-control-layers-expanded h2,
+  .leaflet-control-layers-expanded h3,
+  .leaflet-control-layers-expanded h4,
+  .leaflet-control-layers-expanded h5 {
+    margin: 0; }
+  .leaflet-control-layers .leaflet-control-layers-toggle,
+  .leaflet-control-layers-expanded .leaflet-control-layers-toggle {
+    width: 100%; }
+    .leaflet-control-layers .leaflet-control-layers-toggle h1,
+    .leaflet-control-layers .leaflet-control-layers-toggle h2,
+    .leaflet-control-layers .leaflet-control-layers-toggle h3,
+    .leaflet-control-layers .leaflet-control-layers-toggle h4,
+    .leaflet-control-layers .leaflet-control-layers-toggle h5,
+    .leaflet-control-layers .leaflet-control-layers-toggle h6,
+    .leaflet-control-layers-expanded .leaflet-control-layers-toggle h1,
+    .leaflet-control-layers-expanded .leaflet-control-layers-toggle h2,
+    .leaflet-control-layers-expanded .leaflet-control-layers-toggle h3,
+    .leaflet-control-layers-expanded .leaflet-control-layers-toggle h4,
+    .leaflet-control-layers-expanded .leaflet-control-layers-toggle h5,
+    .leaflet-control-layers-expanded .leaflet-control-layers-toggle h6 {
+      color: white;
+      margin: 0; }
+  .leaflet-control-layers .leaflet-control-layers-list,
+  .leaflet-control-layers-expanded .leaflet-control-layers-list {
+    color: white;
+    margin: 0; }
+    .leaflet-control-layers .leaflet-control-layers-list span,
+    .leaflet-control-layers-expanded .leaflet-control-layers-list span {
+      font-size: 14px;
+      padding-left: 0.5em; }
+    .leaflet-control-layers .leaflet-control-layers-list label,
+    .leaflet-control-layers-expanded .leaflet-control-layers-list label {
+      margin: 0; }
+    .leaflet-control-layers .leaflet-control-layers-list .leaflet-control-layers-overlays div,
+    .leaflet-control-layers-expanded .leaflet-control-layers-list .leaflet-control-layers-overlays div {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      padding-left: 10px; }
+
 /*!
  * Bootstrap v4.1.1 (https://getbootstrap.com/)
  * Copyright 2011-2018 The Bootstrap Authors
@@ -6428,10 +6485,16 @@ body {
 .container-fluid,
 body,
 html,
-main {
+#main {
   height: 100%;
   width: 100%;
   overflow: hidden; }
+
+#main {
+  padding: 68px 0 0; }
+  @media screen and (max-width: 540px) {
+    #main {
+      padding: 56px 0px 0px; } }
 
 .modal-title,
 nav {
@@ -6440,7 +6503,6 @@ nav {
 input#assetSearch {
   font-family: "Montserrat"; }
 
-/***Google Translat Styling**/
 .goog-te-banner-frame {
   display: none !important; }
 

@@ -15,7 +15,7 @@ module.exports = {
   module: {
     rules: [{
       test: /\.js$/,
-      exclude: /node_modules/,
+      include: path.resolve(__dirname, 'src/assets/js'),
       loader: "babel-loader",
       options: {
         presets: ['env']
