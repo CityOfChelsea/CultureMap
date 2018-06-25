@@ -20804,6 +20804,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 var base_map_URL = exports.base_map_URL = 'https://api.mapbox.com/styles/v1/tohorner/cjhijn5ba1zon2rpelkgflt7y/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoidG9ob3JuZXIiLCJhIjoiY2l6NGFoeXIxMDRscDMycGd2dzVzZTg3NyJ9.Vfe_mGvZ-mHldkO0x2gXEw';
 var feature_layer_URL = exports.feature_layer_URL = 'https://services3.arcgis.com/U4SbXhYNLOfN36SP/arcgis/rest/services/View_for_Shortlist/FeatureServer/0';
+var historic_district_URL = exports.historic_district_URL = 'https://services3.arcgis.com/U4SbXhYNLOfN36SP/arcgis/rest/services/Chelsea_Historic_Districts/FeatureServer/0?token=QLFcN1YZl1op1kOEn03zsqHQ8Qnf4Rj5swhGE8f0kIMDzuXsg5bnRSpxV5fWKE7EnXzGMV8j4YtuEFbkRh3Lqcz6T7hE9NNImIjNF90Qwo3NCG8tuOMtDB0qe3q8uQpKr0MAb4-1ApD23mPJeh6xMlcAWBMAzdyn3ep-LlgE5DoOsTWcOLF67y8TTUZ9P5gUFOFO8N1-E3EM4AvHt7zYCQM0CQTlhw7U-4k8tftaPXSXbiq3Ytb_3BkEY4OG_7Gv';
 
 /**
  * Dictionary that maps label-friendly asset Categories
@@ -20840,6 +20841,17 @@ var category_field = exports.category_field = 'TAB_NAME';
 var iconURL = exports.iconURL = './assets/icon/0.5x/';
 var iconExtension = exports.iconExtension = '@0.5x.png';
 var zoomDisableCluster = exports.zoomDisableCluster = 18;
+
+var asset_subcategories = exports.asset_subcategories = {
+  'Architecture': ['Historic buildings', 'Significant restorations', 'Contemporary buildings', 'Notable design details'],
+  'Landmark or monument': ['Heritage sites', 'Landmarks', 'Monuments', 'Cemeteries'],
+  'Public art': ['Murals', 'Street art', 'Sculptures', 'Art installations'],
+  'Creative industry': ['Creative studios', 'Practice spaces', 'Creative businesses', 'Coworking facilities', 'Art supplies', 'Artist live/work space'],
+  'Park or open space': ['Parks', 'Playgrounds', 'Natural spaces', 'Scenic areas', 'Community gardens'],
+  'Cultural facility': ['Performance spaces', 'Exhibitions spaces', 'Places of worship', 'Social clubs'],
+  'Food': ['Restaurants', 'Bars/breweries', 'Commercial kitchens', 'Urban agriculture'],
+  'Programming or event': ['Schools', 'Libraries', 'Educational programming', 'Festivals', 'Meeting halls', 'Other notable events']
+};
 
 /***/ }),
 
@@ -20930,11 +20942,16 @@ var typeahead = _interopRequireWildcard(_typeahead);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-L.esri = __webpack_require__(/*! esri-leaflet */ "./node_modules/esri-leaflet/dist/esri-leaflet-debug.js"); //External dependencies 
+L.esri = __webpack_require__(/*! esri-leaflet */ "./node_modules/esri-leaflet/dist/esri-leaflet-debug.js"); //External dependencies
 
 
 //App modules
 
+
+//Enable bootstrap tooltips
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+});
 
 // Initialize the Map
 var mymap = L.map('map', {
@@ -20967,6 +20984,17 @@ var highlightStyle = {
   radius: 15
 };
 highlight.addTo(mymap);
+
+//Load the historic district feature layer
+var historic_districts = L.esri.featureLayer({
+  url: cfg.historic_district_URL
+}).on("click", function (ev) {
+  console.log(ev);
+});
+
+// .bindPopup((layer) => {
+//   return `<h5>Historic district:</h5><p class="my-0">${layer.feature.properties['HISTORIC_N']}</p>`
+// })
 
 // Dictionary for storing all layers.
 var layers = {};
@@ -21147,12 +21175,69 @@ var query = L.esri.query({
   function clearHighlight() {
     highlight.clearLayers();
   }
+
+  //Map legend;
+
+  for (var category in cfg.asset_subcategories) {
+
+    //Get version of category label wo/spaces
+    var category_safe = cfg.asset_categories[category];
+    var iconPath = './assets/icon/1x/' + category_safe + '.png';
+    var iconWidth = '80%';
+    var categoryString = '<div class="row"><div class="col-1 px-0 ml-2"><img src=' + iconPath + ' width=' + iconWidth + '></div><div class="col-9 px-1"><h5>' + category + '</h5></div></div>';
+    var subcategoryString = '<div class="row subcategory-row"><div class="col-1 px-0 ml-2"></div><div class="col-9 px-1 subcategory-column"><p class="subcategory-p"></p></div></div>';
+
+    $('#legendTable').append(categoryString + subcategoryString);
+
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
+
+    try {
+      for (var _iterator2 = cfg.asset_subcategories[category][Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+        var subcategory = _step2.value;
+
+        if (cfg.asset_subcategories[category].indexOf(subcategory) == 0) {
+          $('.subcategory-p').last().append(subcategory + ', ');
+        } else if (cfg.asset_subcategories[category].indexOf(subcategory) < cfg.asset_subcategories[category].length - 1) {
+          $('.subcategory-p').last().append((subcategory + ', ').toLowerCase());
+        } else {
+          $('.subcategory-p').last().append(('' + subcategory).toLowerCase());
+        }
+      }
+    } catch (err) {
+      _didIteratorError2 = true;
+      _iteratorError2 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+          _iterator2.return();
+        }
+      } finally {
+        if (_didIteratorError2) {
+          throw _iteratorError2;
+        }
+      }
+    }
+  }
 }); // End query.run()
 
 // Google Translat layer_widget
 
 goog.switchLangLink();
 goog.switchGoogleTransCookie();
+
+//Other controls
+
+$('#historicDistricts').on('click', function () {
+  if (mymap.hasLayer(historic_districts)) {
+    $('#historicDistricts').html('Show historic districts');
+    mymap.removeLayer(historic_districts);
+  } else {
+    mymap.addLayer(historic_districts);
+    $('#historicDistricts').html('Hide historic districts');
+  }
+});
 
 /***/ }),
 

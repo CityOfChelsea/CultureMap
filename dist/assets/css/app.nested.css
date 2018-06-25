@@ -6500,3 +6500,10 @@ input#assetSearch {
 
 .material-icons.md-48 {
   font-size: 48px; }
+
+.leaflet-popup-content h5 {
+  font-family: "Arvo";
+  font-size: 16px; }
+
+.leaflet-popup-content p {
+  font-family: "Montserrat"; }

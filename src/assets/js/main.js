@@ -1,4 +1,4 @@
-//External dependencies 
+//External dependencies
 import 'leaflet'
 L.esri = require('esri-leaflet');
 import 'leaflet.markercluster';
@@ -10,6 +10,11 @@ import * as util from './util.js';
 import * as goog from './goog.js';
 import * as sidebar from './sidebar.js';
 import * as typeahead from './typeahead.js'
+
+//Enable bootstrap tooltips
+$(function() {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 
 // Initialize the Map
 let mymap = L.map('map', {
@@ -36,12 +41,23 @@ const highlightStyle = {
   stroke: true,
   color: "#F25C05",
   weight: 5,
-  opacity:0.7,
+  opacity: 0.7,
   fillColor: "#F25C05",
   fillOpacity: 0.3,
   radius: 15
 };
 highlight.addTo(mymap);
+
+//Load the historic district feature layer
+const historic_districts = L.esri.featureLayer({
+  url: cfg.historic_district_URL
+}).on("click", (ev) =>{
+  console.log(ev);
+})
+
+// .bindPopup((layer) => {
+//   return `<h5>Historic district:</h5><p class="my-0">${layer.feature.properties['HISTORIC_N']}</p>`
+// })
 
 // Dictionary for storing all layers.
 let layers = {};
@@ -183,7 +199,7 @@ let query = L.esri.query({
       cfg.zoomDisableCluster);
   });
 
-  if ( !("ontouchstart" in window) ) {
+  if (!("ontouchstart" in window)) {
     $(document).on("mouseover", ".feature-row", function(e) {
       highlight.clearLayers().addLayer(L.circleMarker([$(this).attr("lat"), $(this).attr("lng")], highlightStyle));
       console.log(highlight)
@@ -196,9 +212,46 @@ let query = L.esri.query({
     highlight.clearLayers();
   }
 
+  //Map legend;
+
+  for (let category in cfg.asset_subcategories) {
+
+    //Get version of category label wo/spaces
+    let category_safe = cfg.asset_categories[category];
+    let iconPath = `./assets/icon/1x/${category_safe}.png`;
+    let iconWidth = '80%'
+    let categoryString = `<div class="row"><div class="col-1 px-0 ml-2"><img src=${iconPath} width=${iconWidth}></div><div class="col-9 px-1"><h5>${category}</h5></div></div>`
+    let subcategoryString = `<div class="row subcategory-row"><div class="col-1 px-0 ml-2"></div><div class="col-9 px-1 subcategory-column"><p class="subcategory-p"></p></div></div>`
+
+    $('#legendTable').append(categoryString + subcategoryString)
+
+    for (let subcategory of cfg.asset_subcategories[category]) {
+      if (cfg.asset_subcategories[category].indexOf(subcategory) == 0) {
+        $('.subcategory-p').last().append(`${subcategory}, `)
+      } else if (cfg.asset_subcategories[category].indexOf(subcategory) < cfg.asset_subcategories[category].length - 1) {
+        $('.subcategory-p').last().append(`${subcategory}, `.toLowerCase())
+      } else {
+        $('.subcategory-p').last().append(`${subcategory}`.toLowerCase());
+      }
+
+    }
+  }
+
 }) // End query.run()
 
 // Google Translat layer_widget
 
 goog.switchLangLink();
 goog.switchGoogleTransCookie();
+
+//Other controls
+
+$('#historicDistricts').on('click', () => {
+  if (mymap.hasLayer(historic_districts)) {
+    $('#historicDistricts').html('Show historic districts')
+    mymap.removeLayer(historic_districts)
+  } else {
+    mymap.addLayer(historic_districts)
+    $('#historicDistricts').html('Hide historic districts')
+  }
+})
