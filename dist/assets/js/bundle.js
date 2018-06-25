@@ -21065,11 +21065,6 @@ var query = L.esri.query({
     $(selector_string).closest("div").css("background-color", palette_readable[_key]);
   }
 
-  //Change control icon
-
-  // $(".leaflet-control-layers-toggle").html("<h3>Cultural Asset Categories</h3>")
-
-
   //Parse asset data for search plugin
   var all_assets = [];
   var _iteratorNormalCompletion = true;
@@ -21110,7 +21105,6 @@ var query = L.esri.query({
     },
     searchOnFocus: true,
     callback: {
-      // onReady: () => $('#assetSearch').on('enter',(event) => event.preventDefault()),
       onClick: function onClick(node, query, result) {
         return typeahead.search(node, query, result, mymap, _config.zoomDisableCluster);
       },
@@ -21131,7 +21125,7 @@ var query = L.esri.query({
   });
 
   $(document).on("click", ".feature-row", function (e) {
-    // $(document).off("mouseout", ".feature-row", clearHighlight);
+    $(document).off("mouseout", ".feature-row", clearHighlight);
     sidebar.click(parseInt($(this).attr("id"), 10), mymap, layers, _config.zoomDisableCluster);
   });
 

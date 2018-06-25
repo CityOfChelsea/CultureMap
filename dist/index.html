@@ -58,13 +58,16 @@
         <li class="nav-item d-flex align-items-center">
           <a href="https://arcg.is/0XGP9S" target="_blank" class="nav-link"><i class="material-icons md-18 align-middle notranslate">location_on</i> Add an asset</a>
         </li>
+        <li class="nav-item d-flex align-items-center">
+          <a class="nav-link" data-toggle="modal" data-target="#legendModal" href="#"><i class="material-icons md-18 align-middle notranslate">view_list</i> Legend</a>
+        </li>
         <li class="nav-item dropdown d-flex align-items-center">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-         <i class="material-icons md-18 align-middle notranslate">build</i> Tools
+         <i class="material-icons md-18 align-middle notranslate">settings</i> Settings
        </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Legend</a>
-            <a class="dropdown-item" href="#">Historic Districts</a>
+
+            <a class="dropdown-item" id="#mapSettings" href="#">Show Historic Districts</a>
           </div>
         </li>
       </ul>
@@ -161,6 +164,28 @@
     </div>
   </div>
 
+  <!-- Legend Modal -->
+  <div class="modal fade" id="legendModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Map Legend</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -168,7 +193,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   <script type="text/javascript">
     //Show about section on launch
-    $('#aboutModal').modal('show')
+    // $('#aboutModal').modal('show')
   </script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
   <script src="assets/js/jquery.typeahead.min.js" charset="utf-8"></script>

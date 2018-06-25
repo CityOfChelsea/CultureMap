@@ -154,11 +154,6 @@ let query = L.esri.query({
     $(selector_string).closest("div").css("background-color", palette_readable[key]);
   }
 
-  //Change control icon
-
-  // $(".leaflet-control-layers-toggle").html("<h3>Cultural Asset Categories</h3>")
-
-
   //Parse asset data for search plugin
   const all_assets = []
   for (let feature of response.features) {
@@ -177,7 +172,6 @@ let query = L.esri.query({
     },
     searchOnFocus: true,
     callback: {
-      // onReady: () => $('#assetSearch').on('enter',(event) => event.preventDefault()),
       onClick: (node, query, result) => typeahead.search(node, query, result, mymap, zoomDisableCluster),
       onSubmit: (node, query, result) => typeahead.search(node, query, result, mymap, zoomDisableCluster)
     },
@@ -192,7 +186,7 @@ let query = L.esri.query({
   mymap.on('moveend zoomend overlayremove overlayadd', () => sidebar.sync(mymap, layers));
 
   $(document).on("click", ".feature-row", function(e) {
-    // $(document).off("mouseout", ".feature-row", clearHighlight);
+    $(document).off("mouseout", ".feature-row", clearHighlight);
     sidebar.click(parseInt($(this).attr("id"), 10),
       mymap,
       layers,
