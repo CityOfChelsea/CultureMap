@@ -1,21 +1,11 @@
-//External dependencies include JQuery and Bootstrap
-
+//External dependencies 
 import 'leaflet'
 L.esri = require('esri-leaflet');
 import 'leaflet.markercluster';
 import 'leaflet.markercluster.layersupport';
 
-import {
-  base_map_URL,
-  feature_layer_URL,
-  asset_categories,
-  palette,
-  category_field,
-  iconURL,
-  iconExtension,
-  zoomDisableCluster
-} from './config.js';
-
+//App modules
+import * as cfg from './config.js';
 import * as util from './util.js';
 import * as goog from './goog.js';
 import * as sidebar from './sidebar.js';
@@ -36,7 +26,7 @@ let zoom = new L.Control.Zoom({
 mymap.setView([42.39, -71.035], 16);
 
 // Add the basemap
-const basemap = L.tileLayer(base_map_URL, {
+const basemap = L.tileLayer(cfg.base_map_URL, {
   maxZoom: 20
 }).addTo(mymap);
 
@@ -60,29 +50,29 @@ let layers = {};
 //i.e. where STATUS = 1, then create Layers
 //from the resulting geoJSON, by cultural asset cateogry
 let query = L.esri.query({
-  url: feature_layer_URL
+  url: cfg.feature_layer_URL
 }).where("STATUS = 1").run(function(error, featureCollection, response) {
 
   // $('#aboutModal').modal('show')
 
   //Loop through all the asset categories,
   //creating a layer for each one.
-  for (let cat in asset_categories) {
+  for (let cat in cfg.asset_categories) {
 
     //Icons for non-clustered cultural assets
     let icon = L.icon({
-      iconUrl: iconURL + asset_categories[cat] + iconExtension,
+      iconUrl: cfg.iconURL + cfg.asset_categories[cat] + cfg.iconExtension,
       iconSize: [15, 15]
     });
 
     // Function that defines how the icons
     // representing clusters are created
-    let catClusterFunction = util.clusterFunction(asset_categories[cat])
+    let catClusterFunction = util.clusterFunction(cfg.asset_categories[cat])
 
     // Create an empty cluster marker group
     let markers = L.markerClusterGroup.layerSupport({
       iconCreateFunction: catClusterFunction,
-      disableClusteringAtZoom: zoomDisableCluster
+      disableClusteringAtZoom: cfg.zoomDisableCluster
     });
 
     // Create a layer, filtering for a single
@@ -131,7 +121,7 @@ let query = L.esri.query({
     mymap.addLayer(markers)
 
     //Add the layer to the layer dictionary
-    layers[asset_categories[cat]] = markers;
+    layers[cfg.asset_categories[cat]] = markers;
 
   } // End loop that creates layers
 
@@ -139,14 +129,14 @@ let query = L.esri.query({
   /***********Layers control***************/
 
   // Swap out html-safe asset category labels for readable labels
-  let asset_categories_inverted = util.invert_dict(asset_categories);
+  let asset_categories_inverted = util.invert_dict(cfg.asset_categories);
   let label_friendly_layers = util.label_friendly_layers(layers, asset_categories_inverted);
   let layer_widget = L.control.layers(null, label_friendly_layers).addTo(mymap);
 
   //Adjust colors of layer layer_widget
   let palette_readable = {}
-  for (let key in palette) {
-    palette_readable[asset_categories_inverted[key]] = palette[key]
+  for (let key in cfg.palette) {
+    palette_readable[asset_categories_inverted[key]] = cfg.palette[key]
   }
 
   for (let key in palette_readable) {
@@ -172,8 +162,8 @@ let query = L.esri.query({
     },
     searchOnFocus: true,
     callback: {
-      onClick: (node, query, result) => typeahead.search(node, query, result, mymap, zoomDisableCluster),
-      onSubmit: (node, query, result) => typeahead.search(node, query, result, mymap, zoomDisableCluster)
+      onClick: (node, query, result) => typeahead.search(node, query, result, mymap, cfg.zoomDisableCluster),
+      onSubmit: (node, query, result) => typeahead.search(node, query, result, mymap, cfg.zoomDisableCluster)
     },
     debug: true
 
@@ -190,7 +180,7 @@ let query = L.esri.query({
     sidebar.click(parseInt($(this).attr("id"), 10),
       mymap,
       layers,
-      zoomDisableCluster);
+      cfg.zoomDisableCluster);
   });
 
   if ( !("ontouchstart" in window) ) {

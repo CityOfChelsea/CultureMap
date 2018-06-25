@@ -20910,6 +20910,8 @@ __webpack_require__(/*! leaflet.markercluster.layersupport */ "./node_modules/le
 
 var _config = __webpack_require__(/*! ./config.js */ "./src/assets/js/config.js");
 
+var cfg = _interopRequireWildcard(_config);
+
 var _util = __webpack_require__(/*! ./util.js */ "./src/assets/js/util.js");
 
 var util = _interopRequireWildcard(_util);
@@ -20928,7 +20930,11 @@ var typeahead = _interopRequireWildcard(_typeahead);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-L.esri = __webpack_require__(/*! esri-leaflet */ "./node_modules/esri-leaflet/dist/esri-leaflet-debug.js"); //External dependencies include JQuery and Bootstrap
+L.esri = __webpack_require__(/*! esri-leaflet */ "./node_modules/esri-leaflet/dist/esri-leaflet-debug.js"); //External dependencies 
+
+
+//App modules
+
 
 // Initialize the Map
 var mymap = L.map('map', {
@@ -20945,7 +20951,7 @@ var zoom = new L.Control.Zoom({
 mymap.setView([42.39, -71.035], 16);
 
 // Add the basemap
-var basemap = L.tileLayer(_config.base_map_URL, {
+var basemap = L.tileLayer(cfg.base_map_URL, {
   maxZoom: 20
 }).addTo(mymap);
 
@@ -20969,24 +20975,24 @@ var layers = {};
 //i.e. where STATUS = 1, then create Layers
 //from the resulting geoJSON, by cultural asset cateogry
 var query = L.esri.query({
-  url: _config.feature_layer_URL
+  url: cfg.feature_layer_URL
 }).where("STATUS = 1").run(function (error, featureCollection, response) {
   var _loop = function _loop(cat) {
 
     //Icons for non-clustered cultural assets
     var icon = L.icon({
-      iconUrl: _config.iconURL + _config.asset_categories[cat] + _config.iconExtension,
+      iconUrl: cfg.iconURL + cfg.asset_categories[cat] + cfg.iconExtension,
       iconSize: [15, 15]
     });
 
     // Function that defines how the icons
     // representing clusters are created
-    var catClusterFunction = util.clusterFunction(_config.asset_categories[cat]);
+    var catClusterFunction = util.clusterFunction(cfg.asset_categories[cat]);
 
     // Create an empty cluster marker group
     var markers = L.markerClusterGroup.layerSupport({
       iconCreateFunction: catClusterFunction,
-      disableClusteringAtZoom: _config.zoomDisableCluster
+      disableClusteringAtZoom: cfg.zoomDisableCluster
     });
 
     // Create a layer, filtering for a single
@@ -21035,14 +21041,14 @@ var query = L.esri.query({
     mymap.addLayer(markers);
 
     //Add the layer to the layer dictionary
-    layers[_config.asset_categories[cat]] = markers;
+    layers[cfg.asset_categories[cat]] = markers;
   };
 
   // $('#aboutModal').modal('show')
 
   //Loop through all the asset categories,
   //creating a layer for each one.
-  for (var cat in _config.asset_categories) {
+  for (var cat in cfg.asset_categories) {
     _loop(cat);
   } // End loop that creates layers
 
@@ -21050,14 +21056,14 @@ var query = L.esri.query({
   /***********Layers control***************/
 
   // Swap out html-safe asset category labels for readable labels
-  var asset_categories_inverted = util.invert_dict(_config.asset_categories);
+  var asset_categories_inverted = util.invert_dict(cfg.asset_categories);
   var label_friendly_layers = util.label_friendly_layers(layers, asset_categories_inverted);
   var layer_widget = L.control.layers(null, label_friendly_layers).addTo(mymap);
 
   //Adjust colors of layer layer_widget
   var palette_readable = {};
-  for (var key in _config.palette) {
-    palette_readable[asset_categories_inverted[key]] = _config.palette[key];
+  for (var key in cfg.palette) {
+    palette_readable[asset_categories_inverted[key]] = cfg.palette[key];
   }
 
   for (var _key in palette_readable) {
@@ -21106,10 +21112,10 @@ var query = L.esri.query({
     searchOnFocus: true,
     callback: {
       onClick: function onClick(node, query, result) {
-        return typeahead.search(node, query, result, mymap, _config.zoomDisableCluster);
+        return typeahead.search(node, query, result, mymap, cfg.zoomDisableCluster);
       },
       onSubmit: function onSubmit(node, query, result) {
-        return typeahead.search(node, query, result, mymap, _config.zoomDisableCluster);
+        return typeahead.search(node, query, result, mymap, cfg.zoomDisableCluster);
       }
     },
     debug: true
@@ -21126,7 +21132,7 @@ var query = L.esri.query({
 
   $(document).on("click", ".feature-row", function (e) {
     $(document).off("mouseout", ".feature-row", clearHighlight);
-    sidebar.click(parseInt($(this).attr("id"), 10), mymap, layers, _config.zoomDisableCluster);
+    sidebar.click(parseInt($(this).attr("id"), 10), mymap, layers, cfg.zoomDisableCluster);
   });
 
   if (!("ontouchstart" in window)) {
