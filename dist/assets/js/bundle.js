@@ -20804,7 +20804,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 var base_map_URL = exports.base_map_URL = 'https://api.mapbox.com/styles/v1/tohorner/cjhijn5ba1zon2rpelkgflt7y/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoidG9ob3JuZXIiLCJhIjoiY2l6NGFoeXIxMDRscDMycGd2dzVzZTg3NyJ9.Vfe_mGvZ-mHldkO0x2gXEw';
 var feature_layer_URL = exports.feature_layer_URL = 'https://services3.arcgis.com/U4SbXhYNLOfN36SP/arcgis/rest/services/View_for_Shortlist/FeatureServer/0';
-var historic_district_URL = exports.historic_district_URL = 'https://services3.arcgis.com/U4SbXhYNLOfN36SP/arcgis/rest/services/Chelsea_Historic_Districts/FeatureServer/0?token=QLFcN1YZl1op1kOEn03zsqHQ8Qnf4Rj5swhGE8f0kIMDzuXsg5bnRSpxV5fWKE7EnXzGMV8j4YtuEFbkRh3Lqcz6T7hE9NNImIjNF90Qwo3NCG8tuOMtDB0qe3q8uQpKr0MAb4-1ApD23mPJeh6xMlcAWBMAzdyn3ep-LlgE5DoOsTWcOLF67y8TTUZ9P5gUFOFO8N1-E3EM4AvHt7zYCQM0CQTlhw7U-4k8tftaPXSXbiq3Ytb_3BkEY4OG_7Gv';
+var historic_district_URL = exports.historic_district_URL = 'https://services3.arcgis.com/U4SbXhYNLOfN36SP/arcgis/rest/services/Chelsea_Historic_Districts/FeatureServer/0';
 
 /**
  * Dictionary that maps label-friendly asset Categories
@@ -20985,16 +20985,55 @@ var highlightStyle = {
 };
 highlight.addTo(mymap);
 
+var historic_popup = L.popup();
+
 //Load the historic district feature layer
 var historic_districts = L.esri.featureLayer({
   url: cfg.historic_district_URL
-}).on("click", function (ev) {
-  console.log(ev);
 });
 
-// .bindPopup((layer) => {
-//   return `<h5>Historic district:</h5><p class="my-0">${layer.feature.properties['HISTORIC_N']}</p>`
-// })
+historic_districts.on("click", function (ev) {
+  var latlng = ev['latlng'];
+  L.esri.query({ url: cfg.historic_district_URL }).contains(latlng).run(function (error, featureCollection, response) {
+    var features = response.features;
+    var content = void 0;
+    if (features.length > 1) {
+      content = '<h5>Historic districts:</h5>';
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = features[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var feature = _step.value;
+
+          var num = features.indexOf(feature) + 1;
+          content += '<p>(' + num + ') ' + feature.properties['HISTORIC_N'] + '</p>';
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+    } else {
+      var _feature = features[0];
+      content = '<h5>Historic district:</h5><p>' + _feature.properties['HISTORIC_N'] + '</p>';
+    }
+
+    historic_popup.setLatLng(latlng);
+    historic_popup.setContent(content);
+    historic_popup.openOn(mymap);
+  });
+});
 
 // Dictionary for storing all layers.
 var layers = {};
@@ -21101,13 +21140,13 @@ var query = L.esri.query({
 
   //Parse asset data for search plugin
   var all_assets = [];
-  var _iteratorNormalCompletion = true;
-  var _didIteratorError = false;
-  var _iteratorError = undefined;
+  var _iteratorNormalCompletion2 = true;
+  var _didIteratorError2 = false;
+  var _iteratorError2 = undefined;
 
   try {
-    for (var _iterator = response.features[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-      var feature = _step.value;
+    for (var _iterator2 = response.features[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+      var feature = _step2.value;
 
       feature.properties.LAYER = feature.layer;
       all_assets.push(feature.properties);
@@ -21115,16 +21154,16 @@ var query = L.esri.query({
 
     // Typeahead
   } catch (err) {
-    _didIteratorError = true;
-    _iteratorError = err;
+    _didIteratorError2 = true;
+    _iteratorError2 = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion && _iterator.return) {
-        _iterator.return();
+      if (!_iteratorNormalCompletion2 && _iterator2.return) {
+        _iterator2.return();
       }
     } finally {
-      if (_didIteratorError) {
-        throw _iteratorError;
+      if (_didIteratorError2) {
+        throw _iteratorError2;
       }
     }
   }
@@ -21189,13 +21228,13 @@ var query = L.esri.query({
 
     $('#legendTable').append(categoryString + subcategoryString);
 
-    var _iteratorNormalCompletion2 = true;
-    var _didIteratorError2 = false;
-    var _iteratorError2 = undefined;
+    var _iteratorNormalCompletion3 = true;
+    var _didIteratorError3 = false;
+    var _iteratorError3 = undefined;
 
     try {
-      for (var _iterator2 = cfg.asset_subcategories[category][Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-        var subcategory = _step2.value;
+      for (var _iterator3 = cfg.asset_subcategories[category][Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+        var subcategory = _step3.value;
 
         if (cfg.asset_subcategories[category].indexOf(subcategory) == 0) {
           $('.subcategory-p').last().append(subcategory + ', ');
@@ -21206,16 +21245,16 @@ var query = L.esri.query({
         }
       }
     } catch (err) {
-      _didIteratorError2 = true;
-      _iteratorError2 = err;
+      _didIteratorError3 = true;
+      _iteratorError3 = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion2 && _iterator2.return) {
-          _iterator2.return();
+        if (!_iteratorNormalCompletion3 && _iterator3.return) {
+          _iterator3.return();
         }
       } finally {
-        if (_didIteratorError2) {
-          throw _iteratorError2;
+        if (_didIteratorError3) {
+          throw _iteratorError3;
         }
       }
     }

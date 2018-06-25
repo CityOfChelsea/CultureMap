@@ -74,6 +74,11 @@ input#assetSearch {
     font-size: 16px;
   }
   p {
-    font-family: $font-family-sans-serif
+    font-family: $font-family-sans-serif;
+    margin: 5px 0px !important;
   }
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 0px !important;
 }

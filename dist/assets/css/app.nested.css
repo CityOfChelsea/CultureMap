@@ -6506,4 +6506,8 @@ input#assetSearch {
   font-size: 16px; }
 
 .leaflet-popup-content p {
-  font-family: "Montserrat"; }
+  font-family: "Montserrat";
+  margin: 5px 0px !important; }
+
+.leaflet-popup-content-wrapper {
+  border-radius: 0px !important; }

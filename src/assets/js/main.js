@@ -48,16 +48,40 @@ const highlightStyle = {
 };
 highlight.addTo(mymap);
 
+const historic_popup = L.popup();
+
 //Load the historic district feature layer
-const historic_districts = L.esri.featureLayer({
+let historic_districts = L.esri.featureLayer({
   url: cfg.historic_district_URL
-}).on("click", (ev) =>{
-  console.log(ev);
 })
 
-// .bindPopup((layer) => {
-//   return `<h5>Historic district:</h5><p class="my-0">${layer.feature.properties['HISTORIC_N']}</p>`
-// })
+
+
+historic_districts.on("click", (ev) =>{
+  let latlng = ev['latlng'];
+  L.esri.query({url: cfg.historic_district_URL}).contains(latlng).run((error, featureCollection, response) =>{
+    let features = response.features;
+    let content;
+    if (features.length > 1) {
+      content = `<h5>Historic districts:</h5>`
+      for (let feature of features){
+        let num = features.indexOf(feature) + 1;
+        content += `<p>(${num}) ${feature.properties['HISTORIC_N']}</p>`;
+      }
+    }
+    else{
+      let feature = features[0]
+      content = `<h5>Historic district:</h5><p>${feature.properties['HISTORIC_N']}</p>`;
+    }
+
+
+    historic_popup.setLatLng(latlng);
+    historic_popup.setContent(content);
+    historic_popup.openOn(mymap);
+  })
+})
+
+
 
 // Dictionary for storing all layers.
 let layers = {};
