@@ -21090,6 +21090,7 @@ function setupPopup(features, latlng, layer, mymap) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.create = create;
 var addSubcategories = exports.addSubcategories = function addSubcategories(subcategory, index, subcategories) {
   if (subcategories.indexOf(subcategory) == 0) {
     $('.subcategory-p').last().append(subcategory + ', ');
@@ -21099,6 +21100,26 @@ var addSubcategories = exports.addSubcategories = function addSubcategories(subc
     $('.subcategory-p').last().append(('' + subcategory).toLowerCase());
   }
 };
+
+function create(category_data, category_map) {
+  for (var category in category_data) {
+
+    //Get version of category label wo/spaces
+    var category_safe = category_map[category];
+    var iconPath = './assets/icon/1x/' + category_safe + '.png';
+    var iconWidth = '80%';
+    var categoryString = '<div class="row"><div class="col-1 px-0 ml-2"><img src=' + iconPath + ' width=' + iconWidth + '></div><div class="col-9 px-1"><h5>' + category + '</h5></div></div>';
+    var subcategoryString = '<div class="row subcategory-row"><div class="col-1 px-0 ml-2"></div><div class="col-9 px-1 subcategory-column"><p class="subcategory-p"></p></div></div>';
+
+    $('#legendTable').append(categoryString + subcategoryString);
+
+    var subcategories = category_data[category];
+
+    subcategories.forEach(function (subcategory, index, subcategories) {
+      return addSubcategories(subcategory, index, subcategories);
+    });
+  }
+}
 
 /***/ }),
 
@@ -21205,6 +21226,7 @@ var historic_districts = L.esri.featureLayer({
   url: cfg.historic_district_URL
 });
 
+//Set up popup for historic districts. (A bit more complex than usual popup because we'd like to display info for all overlapping historic districts.)
 historic_districts.on("click", function (ev) {
   var latlng = ev['latlng'];
   L.esri.query({
@@ -21213,6 +21235,11 @@ historic_districts.on("click", function (ev) {
     var features = response.features;
     historic.setupPopup(features, latlng, historic_highlight, mymap);
   });
+});
+
+//Toggles show/hide in menu
+$('#historicDistricts').on('click', function () {
+  historic.toggle(historic_districts, '#historicDistricts', 'Show historic districts', 'Hide historic districts', mymap);
 });
 
 //////////////////////////////////
@@ -21387,37 +21414,19 @@ var query = L.esri.query({
     highlight.clearLayers();
   }
 
-  //Map legend;
+  ///////////////
+  //Map legend //
+  ///////////////
 
-  for (var category in cfg.asset_subcategories) {
-
-    //Get version of category label wo/spaces
-    var category_safe = cfg.asset_categories[category];
-    var iconPath = './assets/icon/1x/' + category_safe + '.png';
-    var iconWidth = '80%';
-    var categoryString = '<div class="row"><div class="col-1 px-0 ml-2"><img src=' + iconPath + ' width=' + iconWidth + '></div><div class="col-9 px-1"><h5>' + category + '</h5></div></div>';
-    var subcategoryString = '<div class="row subcategory-row"><div class="col-1 px-0 ml-2"></div><div class="col-9 px-1 subcategory-column"><p class="subcategory-p"></p></div></div>';
-
-    $('#legendTable').append(categoryString + subcategoryString);
-
-    var subcategories = cfg.asset_subcategories[category];
-
-    subcategories.forEach(function (subcategory, index, subcategories) {
-      return legend.addSubcategories(subcategory, index, subcategories);
-    });
-  }
+  legend.create(cfg.asset_subcategories, cfg.asset_categories);
 }); // End query.run()
 
-// Google Translat layer_widget
+/////////////////////////////////
+//Google Translat layer_widget //
+/////////////////////////////////
 
 goog.switchLangLink();
 goog.switchGoogleTransCookie();
-
-//Other controls
-
-$('#historicDistricts').on('click', function () {
-  historic.toggle(historic_districts, '#historicDistricts', 'Show historic districts', 'Hide historic districts', mymap);
-});
 
 /***/ }),
 

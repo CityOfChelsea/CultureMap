@@ -61,6 +61,7 @@ let historic_districts = L.esri.featureLayer({
   url: cfg.historic_district_URL
 })
 
+//Set up popup for historic districts. (A bit more complex than usual popup because we'd like to display info for all overlapping historic districts.)
 historic_districts.on("click", (ev) => {
   let latlng = ev['latlng'];
   L.esri.query({
@@ -69,6 +70,11 @@ historic_districts.on("click", (ev) => {
     let features = response.features;
     historic.setupPopup(features, latlng, historic_highlight, mymap)
   })
+})
+
+//Toggles show/hide in menu
+$('#historicDistricts').on('click', () => {
+  historic.toggle(historic_districts, '#historicDistricts', 'Show historic districts', 'Hide historic districts', mymap)
 })
 
 //////////////////////////////////
@@ -216,33 +222,17 @@ let query = L.esri.query({
     highlight.clearLayers();
   }
 
-  //Map legend;
+  ///////////////
+  //Map legend //
+  ///////////////
 
-  for (let category in cfg.asset_subcategories) {
+  legend.create(cfg.asset_subcategories, cfg.asset_categories);
 
-    //Get version of category label wo/spaces
-    let category_safe = cfg.asset_categories[category];
-    let iconPath = `./assets/icon/1x/${category_safe}.png`;
-    let iconWidth = '80%'
-    let categoryString = `<div class="row"><div class="col-1 px-0 ml-2"><img src=${iconPath} width=${iconWidth}></div><div class="col-9 px-1"><h5>${category}</h5></div></div>`
-    let subcategoryString = `<div class="row subcategory-row"><div class="col-1 px-0 ml-2"></div><div class="col-9 px-1 subcategory-column"><p class="subcategory-p"></p></div></div>`
-
-    $('#legendTable').append(categoryString + subcategoryString)
-
-    const subcategories = cfg.asset_subcategories[category];
-
-    subcategories.forEach((subcategory, index, subcategories) =>
-      legend.addSubcategories(subcategory, index, subcategories));
-  }
 }) // End query.run()
 
-// Google Translat layer_widget
+/////////////////////////////////
+//Google Translat layer_widget //
+/////////////////////////////////
 
 goog.switchLangLink();
 goog.switchGoogleTransCookie();
-
-//Other controls
-
-$('#historicDistricts').on('click', () => {
-  historic.toggle(historic_districts, '#historicDistricts', 'Show historic districts', 'Hide historic districts', mymap)
-})
