@@ -20930,6 +20930,10 @@ Object.defineProperty(exports, "__esModule", {
 exports.clearOnClick = clearOnClick;
 exports.formatPopup = formatPopup;
 exports.toggle = toggle;
+exports.setupPopup = setupPopup;
+
+__webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
+
 function clearOnClick(layer) {
   console.log(layer);
   if (!$.isEmptyObject(layer)) {
@@ -20981,6 +20985,21 @@ function toggle(layer, id, msg1, msg2, mymap) {
     mymap.addLayer(layer);
     $(id).html(msg2);
   }
+}
+
+function setupPopup(features, latlng, layer, mymap) {
+
+  var popup = L.popup();
+
+  var content = formatPopup(features);
+  popup.setLatLng(latlng);
+  popup.setContent(content);
+  popup.openOn(mymap);
+
+  layer.addData(features);
+  mymap.once('click popupclose', function () {
+    clearOnClick(layer);
+  });
 }
 
 /***/ }),
@@ -21042,6 +21061,10 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip();
 });
 
+///////////////
+//Set up map //
+///////////////
+
 // Initialize the Map
 var mymap = L.map('map', {
   zoomControl: false,
@@ -21065,13 +21088,15 @@ var basemap = L.tileLayer(cfg.base_map_URL, {
 var highlight = L.geoJson(null);
 highlight.addTo(mymap);
 
-//HISTORIC
+/////////////////////////////////////
+//Historic disctrict functionality //
+/////////////////////////////////////
+
+//Add historic highlight layer
 var historic_highlight = L.geoJson(null, {
   color: '#00FFFF',
   weight: 5
 }).addTo(mymap);
-
-var historic_popup = L.popup();
 
 //Load the historic district feature layer
 var historic_districts = L.esri.featureLayer({
@@ -21083,18 +21108,8 @@ historic_districts.on("click", function (ev) {
   L.esri.query({
     url: cfg.historic_district_URL
   }).contains(latlng).run(function (error, featureCollection, response) {
-
     var features = response.features;
-    var content = historic.formatPopup(features);
-
-    historic_popup.setLatLng(latlng);
-    historic_popup.setContent(content);
-    historic_popup.openOn(mymap);
-
-    historic_highlight.addData(features);
-    mymap.once('click popupclose', function () {
-      historic.clearOnClick(historic_highlight);
-    });
+    historic.setupPopup(features, latlng, historic_highlight, mymap);
   });
 });
 

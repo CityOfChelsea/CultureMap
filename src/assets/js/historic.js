@@ -1,3 +1,5 @@
+import 'leaflet';
+
 export function clearOnClick(layer){
   console.log(layer);
   if (!$.isEmptyObject(layer)) {
@@ -28,4 +30,19 @@ export function toggle(layer, id, msg1, msg2, mymap) {
     mymap.addLayer(layer)
     $(id).html(msg2)
   }
+}
+
+export function setupPopup(features, latlng, layer, mymap){
+
+  const popup = L.popup();
+
+  let content = formatPopup(features);
+  popup.setLatLng(latlng);
+  popup.setContent(content);
+  popup.openOn(mymap);
+
+  layer.addData(features);
+  mymap.once('click popupclose', () => {
+    clearOnClick(layer);
+  });
 }

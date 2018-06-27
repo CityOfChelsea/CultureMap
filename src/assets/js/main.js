@@ -18,6 +18,10 @@ $(function() {
   $('[data-toggle="tooltip"]').tooltip()
 })
 
+///////////////
+//Set up map //
+///////////////
+
 // Initialize the Map
 let mymap = L.map('map', {
   zoomControl: false,
@@ -41,13 +45,15 @@ const basemap = L.tileLayer(cfg.base_map_URL, {
 let highlight = L.geoJson(null);
 highlight.addTo(mymap);
 
-//HISTORIC
+/////////////////////////////////////
+//Historic disctrict functionality //
+/////////////////////////////////////
+
+//Add historic highlight layer
 let historic_highlight = L.geoJson(null, {
   color: '#00FFFF',
   weight: 5
 }).addTo(mymap);
-
-const historic_popup = L.popup();
 
 //Load the historic district feature layer
 let historic_districts = L.esri.featureLayer({
@@ -59,18 +65,8 @@ historic_districts.on("click", (ev) => {
   L.esri.query({
     url: cfg.historic_district_URL
   }).contains(latlng).run((error, featureCollection, response) => {
-
     let features = response.features;
-    const content = historic.formatPopup(features);
-
-    historic_popup.setLatLng(latlng);
-    historic_popup.setContent(content);
-    historic_popup.openOn(mymap);
-
-    historic_highlight.addData(features);
-    mymap.once('click popupclose', () => {
-      historic.clearOnClick(historic_highlight);
-    });
+    historic.setupPopup(features, latlng, historic_highlight, mymap)
   })
 })
 
