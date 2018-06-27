@@ -21090,6 +21090,11 @@ historic_districts.on("click", function (ev) {
     historic_popup.setLatLng(latlng);
     historic_popup.setContent(content);
     historic_popup.openOn(mymap);
+
+    historic_highlight.addData(features);
+    mymap.once('click popupclose', function () {
+      console.log('closed!');
+    });
   });
 });
 
