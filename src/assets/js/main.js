@@ -10,8 +10,9 @@ import * as goog from './goog.js';
 import * as sidebar from './sidebar.js';
 import * as typeahead from './typeahead.js'
 import * as modal from './modal.js';
-import * as historic from './historic.js'
-import * as culture from './cultural_assets.js'
+import * as historic from './historic.js';
+import * as culture from './cultural_assets.js';
+import * as legend from './legend.js';
 
 //Enable bootstrap tooltips
 $(function() {
@@ -228,18 +229,11 @@ let query = L.esri.query({
 
     $('#legendTable').append(categoryString + subcategoryString)
 
-    for (let subcategory of cfg.asset_subcategories[category]) {
-      if (cfg.asset_subcategories[category].indexOf(subcategory) == 0) {
-        $('.subcategory-p').last().append(`${subcategory}, `)
-      } else if (cfg.asset_subcategories[category].indexOf(subcategory) < cfg.asset_subcategories[category].length - 1) {
-        $('.subcategory-p').last().append(`${subcategory}, `.toLowerCase())
-      } else {
-        $('.subcategory-p').last().append(`${subcategory}`.toLowerCase());
-      }
+    const subcategories = cfg.asset_subcategories[category];
 
-    }
+    subcategories.forEach((subcategory, index, subcategories) =>
+      legend.addSubcategories(subcategory, index, subcategories));
   }
-
 }) // End query.run()
 
 // Google Translat layer_widget

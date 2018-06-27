@@ -21077,6 +21077,31 @@ function setupPopup(features, latlng, layer, mymap) {
 
 /***/ }),
 
+/***/ "./src/assets/js/legend.js":
+/*!*********************************!*\
+  !*** ./src/assets/js/legend.js ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var addSubcategories = exports.addSubcategories = function addSubcategories(subcategory, index, subcategories) {
+  if (subcategories.indexOf(subcategory) == 0) {
+    $('.subcategory-p').last().append(subcategory + ', ');
+  } else if (subcategories.indexOf(subcategory) < subcategories.length - 1) {
+    $('.subcategory-p').last().append((subcategory + ', ').toLowerCase());
+  } else {
+    $('.subcategory-p').last().append(('' + subcategory).toLowerCase());
+  }
+};
+
+/***/ }),
+
 /***/ "./src/assets/js/main.js":
 /*!*******************************!*\
   !*** ./src/assets/js/main.js ***!
@@ -21120,6 +21145,10 @@ var historic = _interopRequireWildcard(_historic);
 var _cultural_assets = __webpack_require__(/*! ./cultural_assets.js */ "./src/assets/js/cultural_assets.js");
 
 var culture = _interopRequireWildcard(_cultural_assets);
+
+var _legend = __webpack_require__(/*! ./legend.js */ "./src/assets/js/legend.js");
+
+var legend = _interopRequireWildcard(_legend);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -21371,36 +21400,11 @@ var query = L.esri.query({
 
     $('#legendTable').append(categoryString + subcategoryString);
 
-    var _iteratorNormalCompletion2 = true;
-    var _didIteratorError2 = false;
-    var _iteratorError2 = undefined;
+    var subcategories = cfg.asset_subcategories[category];
 
-    try {
-      for (var _iterator2 = cfg.asset_subcategories[category][Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-        var subcategory = _step2.value;
-
-        if (cfg.asset_subcategories[category].indexOf(subcategory) == 0) {
-          $('.subcategory-p').last().append(subcategory + ', ');
-        } else if (cfg.asset_subcategories[category].indexOf(subcategory) < cfg.asset_subcategories[category].length - 1) {
-          $('.subcategory-p').last().append((subcategory + ', ').toLowerCase());
-        } else {
-          $('.subcategory-p').last().append(('' + subcategory).toLowerCase());
-        }
-      }
-    } catch (err) {
-      _didIteratorError2 = true;
-      _iteratorError2 = err;
-    } finally {
-      try {
-        if (!_iteratorNormalCompletion2 && _iterator2.return) {
-          _iterator2.return();
-        }
-      } finally {
-        if (_didIteratorError2) {
-          throw _iteratorError2;
-        }
-      }
-    }
+    subcategories.forEach(function (subcategory, index, subcategories) {
+      return legend.addSubcategories(subcategory, index, subcategories);
+    });
   }
 }); // End query.run()
 
