@@ -10,6 +10,7 @@ import * as util from './util.js';
 import * as goog from './goog.js';
 import * as sidebar from './sidebar.js';
 import * as typeahead from './typeahead.js'
+import * as modal from './modal.js';
 
 //Enable bootstrap tooltips
 $(function() {
@@ -128,18 +129,8 @@ let query = L.esri.query({
         layer.on('click', () => {
           $("#featureModal .modal-title").html(feature.properties.NAME);
 
-          let modal_content = '';
-
-          if (feature.properties.PIC_URL) {
-            modal_content += `<img id="featureModalPic" class="mb-3" src="${feature.properties.PIC_URL}">`
-          }
-          if (feature.properties.TAB_NAME) {
-            modal_content += `<p>Category: <i>${feature.properties.TAB_NAME}</i></p>`
-          }
-          if (feature.properties.DESC1) {
-            modal_content += feature.properties.DESC1
-          }
-
+          let modal_content = modal.format(feature);
+  
           $("#featureModal .modal-body").html(modal_content);
           $("#featureModal .learn-more").attr("href", feature.properties.WEBSITE);
           $("#featureModal").modal("show");

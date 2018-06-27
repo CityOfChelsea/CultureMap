@@ -20940,6 +20940,10 @@ var _typeahead = __webpack_require__(/*! ./typeahead.js */ "./src/assets/js/type
 
 var typeahead = _interopRequireWildcard(_typeahead);
 
+var _modal = __webpack_require__(/*! ./modal.js */ "./src/assets/js/modal.js");
+
+var modal = _interopRequireWildcard(_modal);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 L.esri = __webpack_require__(/*! esri-leaflet */ "./node_modules/esri-leaflet/dist/esri-leaflet-debug.js"); //External dependencies
@@ -21075,17 +21079,7 @@ var query = L.esri.query({
         layer.on('click', function () {
           $("#featureModal .modal-title").html(feature.properties.NAME);
 
-          var modal_content = '';
-
-          if (feature.properties.PIC_URL) {
-            modal_content += '<img id="featureModalPic" class="mb-3" src="' + feature.properties.PIC_URL + '">';
-          }
-          if (feature.properties.TAB_NAME) {
-            modal_content += '<p>Category: <i>' + feature.properties.TAB_NAME + '</i></p>';
-          }
-          if (feature.properties.DESC1) {
-            modal_content += feature.properties.DESC1;
-          }
+          var modal_content = modal.format(feature);
 
           $("#featureModal .modal-body").html(modal_content);
           $("#featureModal .learn-more").attr("href", feature.properties.WEBSITE);
@@ -21277,6 +21271,39 @@ $('#historicDistricts').on('click', function () {
     $('#historicDistricts').html('Hide historic districts');
   }
 });
+
+/***/ }),
+
+/***/ "./src/assets/js/modal.js":
+/*!********************************!*\
+  !*** ./src/assets/js/modal.js ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.format = format;
+function format(feature) {
+  $("#featureModal .modal-title").html(feature.properties.NAME);
+
+  var modal_content = '';
+
+  if (feature.properties.PIC_URL) {
+    modal_content += "<img id=\"featureModalPic\" class=\"mb-3\" src=\"" + feature.properties.PIC_URL + "\">";
+  }
+  if (feature.properties.TAB_NAME) {
+    modal_content += "<p>Category: <i>" + feature.properties.TAB_NAME + "</i></p>";
+  }
+  if (feature.properties.DESC1) {
+    modal_content += feature.properties.DESC1;
+  }
+  return modal_content;
+}
 
 /***/ }),
 
