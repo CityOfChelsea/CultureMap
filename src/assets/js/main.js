@@ -6,12 +6,12 @@ import 'leaflet.markercluster.layersupport';
 
 //App modules
 import * as cfg from './config.js';
-import * as util from './util.js';
 import * as goog from './goog.js';
 import * as sidebar from './sidebar.js';
 import * as typeahead from './typeahead.js'
 import * as modal from './modal.js';
 import * as historic from './historic.js'
+import * as culture from './cultural_assets.js'
 
 //Enable bootstrap tooltips
 $(function() {
@@ -45,9 +45,9 @@ const basemap = L.tileLayer(cfg.base_map_URL, {
 let highlight = L.geoJson(null);
 highlight.addTo(mymap);
 
-/////////////////////////////////////
-//Historic disctrict functionality //
-/////////////////////////////////////
+///////////////////////////////////
+//Historic district functionality//
+///////////////////////////////////
 
 //Add historic highlight layer
 let historic_highlight = L.geoJson(null, {
@@ -69,6 +69,10 @@ historic_districts.on("click", (ev) => {
     historic.setupPopup(features, latlng, historic_highlight, mymap)
   })
 })
+
+//////////////////////////////////
+//Cultural asset database query //
+//////////////////////////////////
 
 // Dictionary for storing all layers.
 let layers = {};
@@ -92,7 +96,7 @@ let query = L.esri.query({
 
     // Function that defines how the icons
     // representing clusters are created
-    let catClusterFunction = util.clusterFunction(cfg.asset_categories[cat])
+    let catClusterFunction = culture.clusterFunction(cfg.asset_categories[cat])
 
     // Create an empty cluster marker group
     let markers = L.markerClusterGroup.layerSupport({
@@ -144,8 +148,8 @@ let query = L.esri.query({
   /***********Layers control***************/
 
   // Swap out html-safe asset category labels for readable labels
-  let asset_categories_inverted = util.invert_dict(cfg.asset_categories);
-  let label_friendly_layers = util.label_friendly_layers(layers, asset_categories_inverted);
+  let asset_categories_inverted = culture.invert_dict(cfg.asset_categories);
+  let label_friendly_layers = culture.label_friendly_layers(layers, asset_categories_inverted);
   let layer_widget = L.control.layers(null, label_friendly_layers).addTo(mymap);
 
   //Adjust colors of layer layer_widget

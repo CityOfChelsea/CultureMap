@@ -20865,6 +20865,79 @@ var highlightStyle = exports.highlightStyle = {
 
 /***/ }),
 
+/***/ "./src/assets/js/cultural_assets.js":
+/*!******************************************!*\
+  !*** ./src/assets/js/cultural_assets.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.clusterFunction = clusterFunction;
+exports.invert_dict = invert_dict;
+exports.label_friendly_layers = label_friendly_layers;
+/**
+ * Closure for assigning classes to icons according
+ * to asset category
+ * @param  {string} category [description]
+ * @return {function}          [description]
+ */
+function clusterFunction(category) {
+  return function (cluster) {
+    // get the number of items in the cluster
+    var count = cluster.getChildCount();
+
+    // figure out how many digits long the number is
+    var digits = (count + '').length;
+
+    // return a new L.DivIcon with our classes so we can
+    // style them with CSS. Take a look at the CSS in
+    // the <head> to see these styles. You have to set
+    // iconSize to null if you want to use CSS to set the
+    // width and height.
+    return new L.divIcon({
+      html: count,
+      className: 'cluster digits-' + digits + "-" + category,
+      iconSize: null
+    });
+  };
+};
+
+/**
+ * Exchanges dictionary keys for values
+ * @param  {dictionary} dict input dicitonary
+ * @return {dictionary}      reversed dicitonary
+ */
+function invert_dict(dict) {
+  var asset_categories_reversed = {};
+  for (var key in dict) {
+    asset_categories_reversed[dict[key]] = key;
+  }
+  return asset_categories_reversed;
+}
+
+/**
+ * Convert keys in an dictionary of Leaflet layers
+ * from HTML-safe strings to readable strings
+ * @param  {[type]} layers   Dictionary of layers with HTML-safe keys
+ * @param  {[type]} inverted Dictionary that maps HTML-safe to readable keys
+ * @return {[type]}          Dictionary of layers with readable keys
+ */
+function label_friendly_layers(layers, inverted) {
+  var label_friendly_layers = {};
+  for (var key in layers) {
+    label_friendly_layers[inverted[key]] = layers[key];
+  };
+  return label_friendly_layers;
+}
+
+/***/ }),
+
 /***/ "./src/assets/js/goog.js":
 /*!*******************************!*\
   !*** ./src/assets/js/goog.js ***!
@@ -21024,10 +21097,6 @@ var _config = __webpack_require__(/*! ./config.js */ "./src/assets/js/config.js"
 
 var cfg = _interopRequireWildcard(_config);
 
-var _util = __webpack_require__(/*! ./util.js */ "./src/assets/js/util.js");
-
-var util = _interopRequireWildcard(_util);
-
 var _goog = __webpack_require__(/*! ./goog.js */ "./src/assets/js/goog.js");
 
 var goog = _interopRequireWildcard(_goog);
@@ -21047,6 +21116,10 @@ var modal = _interopRequireWildcard(_modal);
 var _historic = __webpack_require__(/*! ./historic.js */ "./src/assets/js/historic.js");
 
 var historic = _interopRequireWildcard(_historic);
+
+var _cultural_assets = __webpack_require__(/*! ./cultural_assets.js */ "./src/assets/js/cultural_assets.js");
+
+var culture = _interopRequireWildcard(_cultural_assets);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -21088,9 +21161,9 @@ var basemap = L.tileLayer(cfg.base_map_URL, {
 var highlight = L.geoJson(null);
 highlight.addTo(mymap);
 
-/////////////////////////////////////
-//Historic disctrict functionality //
-/////////////////////////////////////
+///////////////////////////////////
+//Historic district functionality//
+///////////////////////////////////
 
 //Add historic highlight layer
 var historic_highlight = L.geoJson(null, {
@@ -21113,6 +21186,10 @@ historic_districts.on("click", function (ev) {
   });
 });
 
+//////////////////////////////////
+//Cultural asset database query //
+//////////////////////////////////
+
 // Dictionary for storing all layers.
 var layers = {};
 
@@ -21132,7 +21209,7 @@ var query = L.esri.query({
 
     // Function that defines how the icons
     // representing clusters are created
-    var catClusterFunction = util.clusterFunction(cfg.asset_categories[cat]);
+    var catClusterFunction = culture.clusterFunction(cfg.asset_categories[cat]);
 
     // Create an empty cluster marker group
     var markers = L.markerClusterGroup.layerSupport({
@@ -21189,8 +21266,8 @@ var query = L.esri.query({
   /***********Layers control***************/
 
   // Swap out html-safe asset category labels for readable labels
-  var asset_categories_inverted = util.invert_dict(cfg.asset_categories);
-  var label_friendly_layers = util.label_friendly_layers(layers, asset_categories_inverted);
+  var asset_categories_inverted = culture.invert_dict(cfg.asset_categories);
+  var label_friendly_layers = culture.label_friendly_layers(layers, asset_categories_inverted);
   var layer_widget = L.control.layers(null, label_friendly_layers).addTo(mymap);
 
   //Adjust colors of layer layer_widget
@@ -21483,109 +21560,6 @@ function search(node, query, result, mymap, zoomDisableCluster) {
       highlight.remove();
     }
   });
-}
-
-/***/ }),
-
-/***/ "./src/assets/js/util.js":
-/*!*******************************!*\
-  !*** ./src/assets/js/util.js ***!
-  \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.clusterFunction = clusterFunction;
-exports.invert_dict = invert_dict;
-exports.label_friendly_layers = label_friendly_layers;
-/**
- * Closure for assigning classes to icons according
- * to asset category
- * @param  {string} category [description]
- * @return {function}          [description]
- */
-function clusterFunction(category) {
-  return function (cluster) {
-    // get the number of items in the cluster
-    var count = cluster.getChildCount();
-
-    // figure out how many digits long the number is
-    var digits = (count + '').length;
-
-    // return a new L.DivIcon with our classes so we can
-    // style them with CSS. Take a look at the CSS in
-    // the <head> to see these styles. You have to set
-    // iconSize to null if you want to use CSS to set the
-    // width and height.
-    return new L.divIcon({
-      html: count,
-      className: 'cluster digits-' + digits + "-" + category,
-      iconSize: null
-    });
-  };
-};
-
-// /**
-//  * Formats popup with information from ArcGIS Online.
-//  * Fields are currently hard-coded into function.
-//  * @param  {Leaflet layer} layer [description]
-//  * @return {string}       HTML string for popup
-//  */
-// export function format_popup(layer) {
-//
-//   let feature_props = layer.feature.properties;
-//   let template = "<h3>{NAME}</h3>"
-//
-//   if (feature_props['PIC_URL']) {
-//     template = template + '<img src={PIC_URL}>';
-//   }
-//
-//   if (feature_props['DESC1']) {
-//     template = template + '<p>{DESC1}</p>';
-//   }
-//
-//   if (feature_props['TAB_NAME']) {
-//     template = template + '<p><i>Category: {TAB_NAME}</p></i>';
-//   }
-//
-//   if (feature_props['WEBSITE']) {
-//     template = template + '<a href={WEBSITE} class="button small special">More info</a>';
-//   }
-//
-//   return L.Util.template(template, layer.feature.properties);
-// }
-
-/**
- * Exchanges dictionary keys for values
- * @param  {dictionary} dict input dicitonary
- * @return {dictionary}      reversed dicitonary
- */
-function invert_dict(dict) {
-  var asset_categories_reversed = {};
-  for (var key in dict) {
-    asset_categories_reversed[dict[key]] = key;
-  }
-  return asset_categories_reversed;
-}
-
-/**
- * Convert keys in an dictionary of Leaflet layers
- * from HTML-safe strings to readable strings
- * @param  {[type]} layers   Dictionary of layers with HTML-safe keys
- * @param  {[type]} inverted Dictionary that maps HTML-safe to readable keys
- * @return {[type]}          Dictionary of layers with readable keys
- */
-function label_friendly_layers(layers, inverted) {
-  var label_friendly_layers = {};
-  for (var key in layers) {
-    label_friendly_layers[inverted[key]] = layers[key];
-  };
-  return label_friendly_layers;
 }
 
 /***/ })
