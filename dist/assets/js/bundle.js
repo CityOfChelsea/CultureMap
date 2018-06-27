@@ -20853,6 +20853,16 @@ var asset_subcategories = exports.asset_subcategories = {
   'Programming or event': ['Schools', 'Libraries', 'Educational programming', 'Festivals', 'Meeting halls', 'Other notable events']
 };
 
+var highlightStyle = exports.highlightStyle = {
+  stroke: true,
+  color: "#F25C05",
+  weight: 5,
+  opacity: 0.7,
+  fillColor: "#F25C05",
+  fillOpacity: 0.3,
+  radius: 15
+};
+
 /***/ }),
 
 /***/ "./src/assets/js/goog.js":
@@ -20904,6 +20914,66 @@ function switchGoogleTransCookie() {
 
 /***/ }),
 
+/***/ "./src/assets/js/historic.js":
+/*!***********************************!*\
+  !*** ./src/assets/js/historic.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.clearOnClick = clearOnClick;
+exports.formatPopup = formatPopup;
+function clearOnClick(layer) {
+  console.log(layer);
+  if (!$.isEmptyObject(layer)) {
+    layer.clearLayers();
+  }
+}
+
+function formatPopup(features) {
+  var content = void 0;
+  if (features.length > 1) {
+    content = '<h5>Historic districts:</h5>';
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = features[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var feature = _step.value;
+
+        var num = features.indexOf(feature) + 1;
+        content += '<p>(' + num + ') ' + feature.properties['HISTORIC_N'] + '</p>';
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator.return) {
+          _iterator.return();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
+    }
+  } else {
+    var _feature = features[0];
+    content = '<h5>Historic district:</h5><p>' + _feature.properties['HISTORIC_N'] + '</p>';
+  }
+  return content;
+}
+
+/***/ }),
+
 /***/ "./src/assets/js/main.js":
 /*!*******************************!*\
   !*** ./src/assets/js/main.js ***!
@@ -20944,6 +21014,10 @@ var _modal = __webpack_require__(/*! ./modal.js */ "./src/assets/js/modal.js");
 
 var modal = _interopRequireWildcard(_modal);
 
+var _historic = __webpack_require__(/*! ./historic.js */ "./src/assets/js/historic.js");
+
+var historic = _interopRequireWildcard(_historic);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 L.esri = __webpack_require__(/*! esri-leaflet */ "./node_modules/esri-leaflet/dist/esri-leaflet-debug.js"); //External dependencies
@@ -20978,16 +21052,13 @@ var basemap = L.tileLayer(cfg.base_map_URL, {
 
 //Add highlight layer
 var highlight = L.geoJson(null);
-var highlightStyle = {
-  stroke: true,
-  color: "#F25C05",
-  weight: 5,
-  opacity: 0.7,
-  fillColor: "#F25C05",
-  fillOpacity: 0.3,
-  radius: 15
-};
 highlight.addTo(mymap);
+
+//HISTORIC
+var historic_highlight = L.geoJson(null, {
+  color: '#00FFFF',
+  weight: 5
+}).addTo(mymap);
 
 var historic_popup = L.popup();
 
@@ -20998,40 +21069,13 @@ var historic_districts = L.esri.featureLayer({
 
 historic_districts.on("click", function (ev) {
   var latlng = ev['latlng'];
-  L.esri.query({ url: cfg.historic_district_URL }).contains(latlng).run(function (error, featureCollection, response) {
+  L.esri.query({
+    url: cfg.historic_district_URL
+  }).contains(latlng).run(function (error, featureCollection, response) {
+
     var features = response.features;
-    var content = void 0;
-    if (features.length > 1) {
-      content = '<h5>Historic districts:</h5>';
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
 
-      try {
-        for (var _iterator = features[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var feature = _step.value;
-
-          var num = features.indexOf(feature) + 1;
-          content += '<p>(' + num + ') ' + feature.properties['HISTORIC_N'] + '</p>';
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-    } else {
-      var _feature = features[0];
-      content = '<h5>Historic district:</h5><p>' + _feature.properties['HISTORIC_N'] + '</p>';
-    }
+    var content = historic.formatPopup(features);
 
     historic_popup.setLatLng(latlng);
     historic_popup.setContent(content);
@@ -21105,8 +21149,6 @@ var query = L.esri.query({
     layers[cfg.asset_categories[cat]] = markers;
   };
 
-  // $('#aboutModal').modal('show')
-
   //Loop through all the asset categories,
   //creating a layer for each one.
   for (var cat in cfg.asset_categories) {
@@ -21134,13 +21176,13 @@ var query = L.esri.query({
 
   //Parse asset data for search plugin
   var all_assets = [];
-  var _iteratorNormalCompletion2 = true;
-  var _didIteratorError2 = false;
-  var _iteratorError2 = undefined;
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
 
   try {
-    for (var _iterator2 = response.features[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-      var feature = _step2.value;
+    for (var _iterator = response.features[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var feature = _step.value;
 
       feature.properties.LAYER = feature.layer;
       all_assets.push(feature.properties);
@@ -21148,16 +21190,16 @@ var query = L.esri.query({
 
     // Typeahead
   } catch (err) {
-    _didIteratorError2 = true;
-    _iteratorError2 = err;
+    _didIteratorError = true;
+    _iteratorError = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion2 && _iterator2.return) {
-        _iterator2.return();
+      if (!_iteratorNormalCompletion && _iterator.return) {
+        _iterator.return();
       }
     } finally {
-      if (_didIteratorError2) {
-        throw _iteratorError2;
+      if (_didIteratorError) {
+        throw _iteratorError;
       }
     }
   }
@@ -21198,7 +21240,7 @@ var query = L.esri.query({
 
   if (!("ontouchstart" in window)) {
     $(document).on("mouseover", ".feature-row", function (e) {
-      highlight.clearLayers().addLayer(L.circleMarker([$(this).attr("lat"), $(this).attr("lng")], highlightStyle));
+      highlight.clearLayers().addLayer(L.circleMarker([$(this).attr("lat"), $(this).attr("lng")], cfg.highlightStyle));
       console.log(highlight);
     });
   }
@@ -21222,13 +21264,13 @@ var query = L.esri.query({
 
     $('#legendTable').append(categoryString + subcategoryString);
 
-    var _iteratorNormalCompletion3 = true;
-    var _didIteratorError3 = false;
-    var _iteratorError3 = undefined;
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
 
     try {
-      for (var _iterator3 = cfg.asset_subcategories[category][Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-        var subcategory = _step3.value;
+      for (var _iterator2 = cfg.asset_subcategories[category][Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+        var subcategory = _step2.value;
 
         if (cfg.asset_subcategories[category].indexOf(subcategory) == 0) {
           $('.subcategory-p').last().append(subcategory + ', ');
@@ -21239,16 +21281,16 @@ var query = L.esri.query({
         }
       }
     } catch (err) {
-      _didIteratorError3 = true;
-      _iteratorError3 = err;
+      _didIteratorError2 = true;
+      _iteratorError2 = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion3 && _iterator3.return) {
-          _iterator3.return();
+        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+          _iterator2.return();
         }
       } finally {
-        if (_didIteratorError3) {
-          throw _iteratorError3;
+        if (_didIteratorError2) {
+          throw _iteratorError2;
         }
       }
     }

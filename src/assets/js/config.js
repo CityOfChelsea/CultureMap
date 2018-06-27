@@ -48,3 +48,13 @@ export const asset_subcategories = {
   'Food': ['Restaurants', 'Bars/breweries', 'Commercial kitchens', 'Urban agriculture'],
   'Programming or event': ['Schools', 'Libraries', 'Educational programming', 'Festivals', 'Meeting halls', 'Other notable events']
 }
+
+export const highlightStyle = {
+  stroke: true,
+  color: "#F25C05",
+  weight: 5,
+  opacity: 0.7,
+  fillColor: "#F25C05",
+  fillOpacity: 0.3,
+  radius: 15
+};

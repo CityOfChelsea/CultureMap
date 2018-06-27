@@ -11,6 +11,7 @@ import * as goog from './goog.js';
 import * as sidebar from './sidebar.js';
 import * as typeahead from './typeahead.js'
 import * as modal from './modal.js';
+import * as historic from './historic.js'
 
 //Enable bootstrap tooltips
 $(function() {
@@ -38,16 +39,13 @@ const basemap = L.tileLayer(cfg.base_map_URL, {
 
 //Add highlight layer
 let highlight = L.geoJson(null);
-const highlightStyle = {
-  stroke: true,
-  color: "#F25C05",
-  weight: 5,
-  opacity: 0.7,
-  fillColor: "#F25C05",
-  fillOpacity: 0.3,
-  radius: 15
-};
 highlight.addTo(mymap);
+
+//HISTORIC
+let historic_highlight = L.geoJson(null, {
+  color: '#00FFFF',
+  weight: 5
+}).addTo(mymap);
 
 const historic_popup = L.popup();
 
@@ -56,33 +54,21 @@ let historic_districts = L.esri.featureLayer({
   url: cfg.historic_district_URL
 })
 
-
-
-historic_districts.on("click", (ev) =>{
+historic_districts.on("click", (ev) => {
   let latlng = ev['latlng'];
-  L.esri.query({url: cfg.historic_district_URL}).contains(latlng).run((error, featureCollection, response) =>{
-    let features = response.features;
-    let content;
-    if (features.length > 1) {
-      content = `<h5>Historic districts:</h5>`
-      for (let feature of features){
-        let num = features.indexOf(feature) + 1;
-        content += `<p>(${num}) ${feature.properties['HISTORIC_N']}</p>`;
-      }
-    }
-    else{
-      let feature = features[0]
-      content = `<h5>Historic district:</h5><p>${feature.properties['HISTORIC_N']}</p>`;
-    }
+  L.esri.query({
+    url: cfg.historic_district_URL
+  }).contains(latlng).run((error, featureCollection, response) => {
 
+    let features = response.features;
+
+    const content = historic.formatPopup(features);
 
     historic_popup.setLatLng(latlng);
     historic_popup.setContent(content);
     historic_popup.openOn(mymap);
   })
 })
-
-
 
 // Dictionary for storing all layers.
 let layers = {};
@@ -93,8 +79,6 @@ let layers = {};
 let query = L.esri.query({
   url: cfg.feature_layer_URL
 }).where("STATUS = 1").run(function(error, featureCollection, response) {
-
-  // $('#aboutModal').modal('show')
 
   //Loop through all the asset categories,
   //creating a layer for each one.
@@ -130,7 +114,7 @@ let query = L.esri.query({
           $("#featureModal .modal-title").html(feature.properties.NAME);
 
           let modal_content = modal.format(feature);
-  
+
           $("#featureModal .modal-body").html(modal_content);
           $("#featureModal .learn-more").attr("href", feature.properties.WEBSITE);
           $("#featureModal").modal("show");
@@ -216,7 +200,7 @@ let query = L.esri.query({
 
   if (!("ontouchstart" in window)) {
     $(document).on("mouseover", ".feature-row", function(e) {
-      highlight.clearLayers().addLayer(L.circleMarker([$(this).attr("lat"), $(this).attr("lng")], highlightStyle));
+      highlight.clearLayers().addLayer(L.circleMarker([$(this).attr("lat"), $(this).attr("lng")], cfg.highlightStyle));
       console.log(highlight)
     });
   }

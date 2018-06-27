@@ -5,7 +5,8 @@ export function clearOnClick(layer){
   }
 }
 
-export function formatPopup(features) {
+export function formatPopup(features){
+  let content;
   if (features.length > 1) {
     content = `<h5>Historic districts:</h5>`
     for (let feature of features) {
@@ -16,4 +17,5 @@ export function formatPopup(features) {
     let feature = features[0]
     content = `<h5>Historic district:</h5><p>${feature.properties['HISTORIC_N']}</p>`;
   }
+  return content;
 }
