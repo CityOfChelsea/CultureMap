@@ -21093,7 +21093,7 @@ historic_districts.on("click", function (ev) {
 
     historic_highlight.addData(features);
     mymap.once('click popupclose', function () {
-      console.log('closed!');
+      historic.clearOnClick(historic_highlight);
     });
   });
 });

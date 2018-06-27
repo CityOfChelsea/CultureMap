@@ -69,7 +69,7 @@ historic_districts.on("click", (ev) => {
 
     historic_highlight.addData(features);
     mymap.once('click popupclose', () => {
-      console.log('closed!');
+      historic.clearOnClick(historic_highlight);
     });
   })
 })
