@@ -19,3 +19,13 @@ export function formatPopup(features){
   }
   return content;
 }
+
+export function toggle(layer, id, msg1, msg2, mymap) {
+  if (mymap.hasLayer(layer)) {
+    $(id).html(msg1)
+    mymap.removeLayer(layer)
+  } else {
+    mymap.addLayer(layer)
+    $(id).html(msg2)
+  }
+}

@@ -20929,6 +20929,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.clearOnClick = clearOnClick;
 exports.formatPopup = formatPopup;
+exports.toggle = toggle;
 function clearOnClick(layer) {
   console.log(layer);
   if (!$.isEmptyObject(layer)) {
@@ -20970,6 +20971,16 @@ function formatPopup(features) {
     content = '<h5>Historic district:</h5><p>' + _feature.properties['HISTORIC_N'] + '</p>';
   }
   return content;
+}
+
+function toggle(layer, id, msg1, msg2, mymap) {
+  if (mymap.hasLayer(layer)) {
+    $(id).html(msg1);
+    mymap.removeLayer(layer);
+  } else {
+    mymap.addLayer(layer);
+    $(id).html(msg2);
+  }
 }
 
 /***/ }),
@@ -21074,7 +21085,6 @@ historic_districts.on("click", function (ev) {
   }).contains(latlng).run(function (error, featureCollection, response) {
 
     var features = response.features;
-
     var content = historic.formatPopup(features);
 
     historic_popup.setLatLng(latlng);
@@ -21305,13 +21315,7 @@ goog.switchGoogleTransCookie();
 //Other controls
 
 $('#historicDistricts').on('click', function () {
-  if (mymap.hasLayer(historic_districts)) {
-    $('#historicDistricts').html('Show historic districts');
-    mymap.removeLayer(historic_districts);
-  } else {
-    mymap.addLayer(historic_districts);
-    $('#historicDistricts').html('Hide historic districts');
-  }
+  historic.toggle(historic_districts, '#historicDistricts', 'Show historic districts', 'Hide historic districts', mymap);
 });
 
 /***/ }),

@@ -61,7 +61,6 @@ historic_districts.on("click", (ev) => {
   }).contains(latlng).run((error, featureCollection, response) => {
 
     let features = response.features;
-
     const content = historic.formatPopup(features);
 
     historic_popup.setLatLng(latlng);
@@ -246,11 +245,5 @@ goog.switchGoogleTransCookie();
 //Other controls
 
 $('#historicDistricts').on('click', () => {
-  if (mymap.hasLayer(historic_districts)) {
-    $('#historicDistricts').html('Show historic districts')
-    mymap.removeLayer(historic_districts)
-  } else {
-    mymap.addLayer(historic_districts)
-    $('#historicDistricts').html('Hide historic districts')
-  }
+  historic.toggle(historic_districts, '#historicDistricts', 'Show historic districts', 'Hide historic districts', mymap)
 })
