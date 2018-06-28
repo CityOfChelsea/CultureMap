@@ -22,5 +22,10 @@ module.exports = {
       }
     }]
   },
-  mode: 'development'
+  mode: 'development',
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
+  }
 };

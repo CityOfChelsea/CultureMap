@@ -21444,21 +21444,55 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.format = format;
+
+var _config = __webpack_require__(/*! ./config.js */ "./src/assets/js/config.js");
+
+__webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
+
+L.esri = __webpack_require__(/*! esri-leaflet */ "./node_modules/esri-leaflet/dist/esri-leaflet-debug.js");
+
 function format(feature) {
   $("#featureModal .modal-title").html(feature.properties.NAME);
+  console.log(feature);
 
   var modal_content = '';
+  var attachedPhotoInfo = getAttachedPhotoInfo(911);
+  console.log(attachedPhotoInfo);
+  // const photoUrls = attachmentUrls(attachedPhotoInfo)
 
   if (feature.properties.PIC_URL) {
-    modal_content += "<img id=\"featureModalPic\" class=\"mb-3\" src=\"" + feature.properties.PIC_URL + "\">";
+    modal_content += '<img id="featureModalPic" class="mb-3" src="' + feature.properties.PIC_URL + '">';
   }
   if (feature.properties.TAB_NAME) {
-    modal_content += "<p>Category: <i>" + feature.properties.TAB_NAME + "</i></p>";
+    modal_content += '<p>Category: <i>' + feature.properties.TAB_NAME + '</i></p>';
   }
   if (feature.properties.DESC1) {
     modal_content += feature.properties.DESC1;
   }
   return modal_content;
+}
+
+function getAttachedPhotoInfo(id) {
+  var request_url = _config.feature_layer_URL + '/' + id + '/attachments/';
+  var res = void 0;
+  L.esri.get(request_url, {}, function (error, response) {
+    if (error) {
+      return error;
+    } else {
+      if (response.attachmentInfos !== null && response.attachmentInfos.length > 0) {
+        res = response;
+        console.log(response);
+        return res;
+      }
+    }
+  });
+};
+
+function attachmentUrls(attachmentInfos) {
+  var urls = attachmentInfos.map(function (att) {
+    return _config.feature_layer_URL + '/attachments/' + att.id;
+  });
+  return urls;
 }
 
 /***/ }),
