@@ -122,13 +122,20 @@ let query = L.esri.query({
       onEachFeature: (feature, layer) => {
         feature.layer = layer;
         layer.on('click', () => {
+          console.log(feature);
           $("#featureModal .modal-title").html(feature.properties.NAME);
-
-          let modal_content = modal.format(feature);
-
-          $("#featureModal .modal-body").html(modal_content);
           $("#featureModal .learn-more").attr("href", feature.properties.WEBSITE);
+          let modal_content = modal.formatContent(feature);
+          $("#featureModal #modalBodyContent").html(modal_content);
           $("#featureModal").modal("show");
+
+          modal.fetchAttachPicUrls(cfg.feature_layer_URL, feature.id)
+            .then(pic_urls => {
+              console.log('pic_urls', pic_urls);
+              let carousel_content = modal.formatPics(feature, pic_urls)
+              $('#featureCarousel').html(carousel_content)
+            })
+            .catch(err => console.log(err))
         })
       },
       filter: function(feature, layer) {
