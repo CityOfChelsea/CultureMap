@@ -21284,7 +21284,6 @@ var query = L.esri.query({
       onEachFeature: function onEachFeature(feature, layer) {
         feature.layer = layer;
         layer.on('click', function () {
-          console.log(feature);
           $("#featureModal .modal-title").html(feature.properties.NAME);
           $("#featureModal .learn-more").attr("href", feature.properties.WEBSITE);
           var modal_content = modal.formatContent(feature);
@@ -21292,7 +21291,6 @@ var query = L.esri.query({
           $("#featureModal").modal("show");
 
           modal.fetchAttachPicUrls(cfg.feature_layer_URL, feature.id).then(function (pic_urls) {
-            console.log('pic_urls', pic_urls);
             var carousel_content = modal.formatPics(feature, pic_urls);
             $('#featureCarousel').html(carousel_content);
           }).catch(function (err) {
@@ -21411,7 +21409,6 @@ var query = L.esri.query({
   if (!("ontouchstart" in window)) {
     $(document).on("mouseover", ".feature-row", function (e) {
       highlight.clearLayers().addLayer(L.circleMarker([$(this).attr("lat"), $(this).attr("lng")], cfg.highlightStyle));
-      console.log(highlight);
     });
   }
 
@@ -21473,6 +21470,7 @@ function formatContent(feature) {
 }
 
 function formatPics(feature, pic_urls) {
+
   var carousel_content = '<div class="carousel-inner">';
   if (pic_urls.length > 1) {
     pic_urls.forEach(function (pic_url, i) {
@@ -21493,31 +21491,6 @@ function formatPics(feature, pic_urls) {
   }
   return carousel_content;
 }
-
-// function getAttachedPhotoInfo(id, fn) {
-//   const request_url = `${feature_layer_URL}/${id}/attachments/`;
-//   L.esri.get(request_url, {}, function(error, response) {
-//     response = receiveResponse(error, response);
-//   });
-// };
-//
-// function receiveResponse(error, response) {
-//   let res;
-//   if (error) {
-//     return error;
-//   } else {
-//     if ((response.attachmentInfos !== null) && (response.attachmentInfos.length > 0)) {
-//       res = response;
-//     }
-//   }
-//   console.log(response)
-//   return res;
-// }
-//
-// function attachmentUrls(attachmentInfos) {
-//   const urls = attachmentInfos.map(att => `${feature_layer_URL}/attachments/${att.id}`)
-//   return urls
-// }
 
 /**
  * Given a feature service url and a feature's Object ID

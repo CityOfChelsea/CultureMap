@@ -17,6 +17,7 @@ export function formatContent(feature) {
 }
 
 export function formatPics(feature, pic_urls){
+
   let carousel_content = `<div class="carousel-inner">`;
   if (pic_urls.length > 1) {
     pic_urls.forEach((pic_url, i) =>{
@@ -46,31 +47,6 @@ export function formatPics(feature, pic_urls){
   return carousel_content;
 }
 
-// function getAttachedPhotoInfo(id, fn) {
-//   const request_url = `${feature_layer_URL}/${id}/attachments/`;
-//   L.esri.get(request_url, {}, function(error, response) {
-//     response = receiveResponse(error, response);
-//   });
-// };
-//
-// function receiveResponse(error, response) {
-//   let res;
-//   if (error) {
-//     return error;
-//   } else {
-//     if ((response.attachmentInfos !== null) && (response.attachmentInfos.length > 0)) {
-//       res = response;
-//     }
-//   }
-//   console.log(response)
-//   return res;
-// }
-//
-// function attachmentUrls(attachmentInfos) {
-//   const urls = attachmentInfos.map(att => `${feature_layer_URL}/attachments/${att.id}`)
-//   return urls
-// }
-
 /**
  * Given a feature service url and a feature's Object ID
  * will return a Promise that resolves to an array of all
@@ -86,9 +62,7 @@ export function fetchAttachPicUrls(service_url, objectId) {
       if (error) {
         reject(error);
       } else {
-        const urls = response.attachmentInfos.map(el => {
-          return `${request_url}/${el.id}`
-        })
+        const urls = response.attachmentInfos.map(el => `${request_url}/${el.id}`)
         resolve(urls);
       }
     })

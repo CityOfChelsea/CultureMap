@@ -122,7 +122,6 @@ let query = L.esri.query({
       onEachFeature: (feature, layer) => {
         feature.layer = layer;
         layer.on('click', () => {
-          console.log(feature);
           $("#featureModal .modal-title").html(feature.properties.NAME);
           $("#featureModal .learn-more").attr("href", feature.properties.WEBSITE);
           let modal_content = modal.formatContent(feature);
@@ -131,7 +130,6 @@ let query = L.esri.query({
 
           modal.fetchAttachPicUrls(cfg.feature_layer_URL, feature.id)
             .then(pic_urls => {
-              console.log('pic_urls', pic_urls);
               let carousel_content = modal.formatPics(feature, pic_urls)
               $('#featureCarousel').html(carousel_content)
             })
@@ -219,7 +217,6 @@ let query = L.esri.query({
   if (!("ontouchstart" in window)) {
     $(document).on("mouseover", ".feature-row", function(e) {
       highlight.clearLayers().addLayer(L.circleMarker([$(this).attr("lat"), $(this).attr("lng")], cfg.highlightStyle));
-      console.log(highlight)
     });
   }
 
