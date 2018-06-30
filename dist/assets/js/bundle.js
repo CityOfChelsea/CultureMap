@@ -21293,10 +21293,12 @@ var query = L.esri.query({
         feature.layer = layer;
         layer.on('click', function () {
 
-          $("#featureModal .modal-title").html(feature.properties.NAME);
-          $("#featureModal .learn-more").attr("href", feature.properties.WEBSITE);
+          modal.addTitle(feature.properties.NAME);
+          modal.addWebsite(feature.properties.WEBSITE);
           var modal_content = modal.formatContent(feature);
-          $("#featureModal #modalBodyContent").html(modal_content);
+
+          modal.addContent(modal_content);
+
           $("#featureModal").modal("show");
 
           //When the votes button is clicked, cast a vote
@@ -21465,6 +21467,9 @@ exports.formatContent = formatContent;
 exports.formatPics = formatPics;
 exports.fetchAttachPicUrls = fetchAttachPicUrls;
 exports.castVote = castVote;
+exports.addTitle = addTitle;
+exports.addWebsite = addWebsite;
+exports.addContent = addContent;
 
 var _config = __webpack_require__(/*! ./config.js */ "./src/assets/js/config.js");
 
@@ -21559,6 +21564,18 @@ function castVote(featureService, feature) {
       });
     }
   });
+}
+
+function addTitle(title) {
+  $("#featureModal .modal-title").html(title);
+}
+
+function addWebsite(website) {
+  $("#featureModal .learn-more").attr("href", website);
+}
+
+function addContent(content) {
+  $("#featureModal #modalBodyContent").html(content);
 }
 
 /***/ }),

@@ -100,3 +100,15 @@ export function castVote(featureService, feature) {
       }
     });
 }
+
+export function addTitle(title) {
+  $("#featureModal .modal-title").html(title);
+}
+
+export function addWebsite(website) {
+  $("#featureModal .learn-more").attr("href", website);
+}
+
+export function addContent(content) {
+  $("#featureModal #modalBodyContent").html(content)
+}

@@ -131,10 +131,12 @@ let query = L.esri.query({
         feature.layer = layer;
         layer.on('click', () => {
 
-          $("#featureModal .modal-title").html(feature.properties.NAME);
-          $("#featureModal .learn-more").attr("href", feature.properties.WEBSITE);
+          modal.addTitle(feature.properties.NAME);
+          modal.addWebsite(feature.properties.WEBSITE);
           let modal_content = modal.formatContent(feature);
-          $("#featureModal #modalBodyContent").html(modal_content);
+
+          modal.addContent(modal_content);
+
           $("#featureModal").modal("show");
 
           //When the votes button is clicked, cast a vote
