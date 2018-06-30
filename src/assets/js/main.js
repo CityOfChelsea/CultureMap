@@ -46,14 +46,6 @@ const basemap = L.tileLayer(cfg.base_map_URL, {
 let highlight = L.geoJson(null);
 highlight.addTo(mymap);
 
-////////////////////////////////////
-//Initialize vote feature service //
-////////////////////////////////////
-
-const voteFeatureService = L.esri.featureLayer({
-  url: cfg.votes_url
-})
-
 ///////////////////////////////////
 //Historic district functionality//
 ///////////////////////////////////
@@ -127,36 +119,8 @@ let query = L.esri.query({
           icon: icon
         });
       },
-      onEachFeature: (feature, layer) => {
-        feature.layer = layer;
-        layer.on('click', () => {
-
-          modal.addTitle(feature.properties.NAME);
-          modal.addWebsite(feature.properties.WEBSITE);
-          let modal_content = modal.formatContent(feature);
-
-          modal.addContent(modal_content);
-
-          $("#featureModal").modal("show");
-
-          //When the votes button is clicked, cast a vote
-          $('#votes').one('click', ev => modal.castVote(voteFeatureService, feature))
-
-          modal.fetchAttachPicUrls(cfg.feature_layer_URL, feature.id)
-            .then(pic_urls => {
-              let carousel_content = modal.formatPics(feature, pic_urls)
-              $('#featureCarousel').html(carousel_content)
-            })
-            .catch(err => console.log(err))
-        })
-      },
-      filter: function(feature, layer) {
-        if (feature.properties.TAB_NAME == cat) {
-          return true;
-        } else {
-          return false;
-        }
-      }
+      onEachFeature: (feature, layer) => modal.create(feature, layer),
+      filter: (feature, layer) => culture.filterByCategory(feature, layer, cat)
     })
 
     //Add the layer to the cluster group
@@ -169,7 +133,6 @@ let query = L.esri.query({
     layers[cfg.asset_categories[cat]] = markers;
 
   } // End loop that creates layers
-
 
   /***********Layers control***************/
 
@@ -254,3 +217,7 @@ let query = L.esri.query({
 
 goog.switchLangLink();
 goog.switchGoogleTransCookie();
+
+//////////////////////
+//Utility functions //
+//////////////////////

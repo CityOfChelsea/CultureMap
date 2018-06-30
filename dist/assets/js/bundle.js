@@ -20881,6 +20881,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.clusterFunction = clusterFunction;
 exports.invert_dict = invert_dict;
 exports.label_friendly_layers = label_friendly_layers;
+exports.filterByCategory = filterByCategory;
 /**
  * Closure for assigning classes to icons according
  * to asset category
@@ -20934,6 +20935,14 @@ function label_friendly_layers(layers, inverted) {
     label_friendly_layers[inverted[key]] = layers[key];
   };
   return label_friendly_layers;
+}
+
+function filterByCategory(feature, layer, cat) {
+  if (feature.properties.TAB_NAME == cat) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 /***/ }),
@@ -21211,14 +21220,6 @@ var basemap = L.tileLayer(cfg.base_map_URL, {
 var highlight = L.geoJson(null);
 highlight.addTo(mymap);
 
-////////////////////////////////////
-//Initialize vote feature service //
-////////////////////////////////////
-
-var voteFeatureService = L.esri.featureLayer({
-  url: cfg.votes_url
-});
-
 ///////////////////////////////////
 //Historic district functionality//
 ///////////////////////////////////
@@ -21290,36 +21291,10 @@ var query = L.esri.query({
         });
       },
       onEachFeature: function onEachFeature(feature, layer) {
-        feature.layer = layer;
-        layer.on('click', function () {
-
-          modal.addTitle(feature.properties.NAME);
-          modal.addWebsite(feature.properties.WEBSITE);
-          var modal_content = modal.formatContent(feature);
-
-          modal.addContent(modal_content);
-
-          $("#featureModal").modal("show");
-
-          //When the votes button is clicked, cast a vote
-          $('#votes').one('click', function (ev) {
-            return modal.castVote(voteFeatureService, feature);
-          });
-
-          modal.fetchAttachPicUrls(cfg.feature_layer_URL, feature.id).then(function (pic_urls) {
-            var carousel_content = modal.formatPics(feature, pic_urls);
-            $('#featureCarousel').html(carousel_content);
-          }).catch(function (err) {
-            return console.log(err);
-          });
-        });
+        return modal.create(feature, layer);
       },
       filter: function filter(feature, layer) {
-        if (feature.properties.TAB_NAME == cat) {
-          return true;
-        } else {
-          return false;
-        }
+        return culture.filterByCategory(feature, layer, cat);
       }
     });
 
@@ -21338,7 +21313,6 @@ var query = L.esri.query({
   for (var cat in cfg.asset_categories) {
     _loop(cat);
   } // End loop that creates layers
-
 
   /***********Layers control***************/
 
@@ -21448,6 +21422,10 @@ var query = L.esri.query({
 goog.switchLangLink();
 goog.switchGoogleTransCookie();
 
+//////////////////////
+//Utility functions //
+//////////////////////
+
 /***/ }),
 
 /***/ "./src/assets/js/modal.js":
@@ -21463,19 +21441,17 @@ goog.switchGoogleTransCookie();
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.formatContent = formatContent;
-exports.formatPics = formatPics;
-exports.fetchAttachPicUrls = fetchAttachPicUrls;
-exports.castVote = castVote;
-exports.addTitle = addTitle;
-exports.addWebsite = addWebsite;
-exports.addContent = addContent;
+exports.create = create;
 
 var _config = __webpack_require__(/*! ./config.js */ "./src/assets/js/config.js");
 
 __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
 
 L.esri = __webpack_require__(/*! esri-leaflet */ "./node_modules/esri-leaflet/dist/esri-leaflet-debug.js");
+
+var voteFeatureService = L.esri.featureLayer({
+  url: _config.votes_url
+});
 
 function formatContent(feature) {
   var modal_content = '';
@@ -21576,6 +21552,34 @@ function addWebsite(website) {
 
 function addContent(content) {
   $("#featureModal #modalBodyContent").html(content);
+}
+
+function create(feature, layer) {
+
+  feature.layer = layer;
+  layer.on('click', function () {
+
+    //Add modal content
+    addTitle(feature.properties.NAME);
+    addWebsite(feature.properties.WEBSITE);
+    var modal_content = formatContent(feature);
+    addContent(modal_content);
+
+    //Show the modal
+    $("#featureModal").modal("show");
+
+    //When the votes button is clicked, cast a vote
+    $('#votes').one('click', function (ev) {
+      return castVote(voteFeatureService, feature);
+    });
+
+    fetchAttachPicUrls(_config.feature_layer_URL, feature.id).then(function (pic_urls) {
+      var carousel_content = formatPics(feature, pic_urls);
+      $('#featureCarousel').html(carousel_content);
+    }).catch(function (err) {
+      return console.log(err);
+    });
+  });
 }
 
 /***/ }),

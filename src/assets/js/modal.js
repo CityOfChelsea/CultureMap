@@ -1,10 +1,15 @@
 import {
-  feature_layer_URL
+  feature_layer_URL,
+  votes_url
 } from './config.js';
 import 'leaflet'
 L.esri = require('esri-leaflet');
 
-export function formatContent(feature) {
+const voteFeatureService = L.esri.featureLayer({
+  url: votes_url
+})
+
+function formatContent(feature) {
   let modal_content = '';
 
   if (feature.properties.TAB_NAME) {
@@ -16,7 +21,7 @@ export function formatContent(feature) {
   return modal_content
 }
 
-export function formatPics(feature, pic_urls) {
+function formatPics(feature, pic_urls) {
 
   let carousel_content = `<div class="carousel-inner">`;
   if (pic_urls.length > 1) {
@@ -54,7 +59,7 @@ export function formatPics(feature, pic_urls) {
  * @param  {string} objectId    [description]
  * @return {Promise}             [description]
  */
-export function fetchAttachPicUrls(service_url, objectId) {
+function fetchAttachPicUrls(service_url, objectId) {
   const request_url = `${service_url}/${objectId}/attachments`;
   return new Promise((resolve, reject) => {
     L.esri.get(request_url, {}, (error, response) => {
@@ -69,7 +74,7 @@ export function fetchAttachPicUrls(service_url, objectId) {
 }
 
 
-export function castVote(featureService, feature) {
+function castVote(featureService, feature) {
 
   const url = featureService.options.url
   console.log(featureService);
@@ -101,14 +106,40 @@ export function castVote(featureService, feature) {
     });
 }
 
-export function addTitle(title) {
+function addTitle(title) {
   $("#featureModal .modal-title").html(title);
 }
 
-export function addWebsite(website) {
+function addWebsite(website) {
   $("#featureModal .learn-more").attr("href", website);
 }
 
-export function addContent(content) {
+function addContent(content) {
   $("#featureModal #modalBodyContent").html(content)
+}
+
+export function create(feature, layer) {
+
+  feature.layer = layer;
+  layer.on('click', () => {
+
+    //Add modal content
+    addTitle(feature.properties.NAME);
+    addWebsite(feature.properties.WEBSITE);
+    let modal_content = formatContent(feature);
+    addContent(modal_content);
+
+    //Show the modal
+    $("#featureModal").modal("show");
+
+    //When the votes button is clicked, cast a vote
+    $('#votes').one('click', ev => castVote(voteFeatureService, feature))
+
+    fetchAttachPicUrls(feature_layer_URL, feature.id)
+      .then(pic_urls => {
+        let carousel_content = formatPics(feature, pic_urls)
+        $('#featureCarousel').html(carousel_content)
+      })
+      .catch(err => console.log(err))
+  })
 }

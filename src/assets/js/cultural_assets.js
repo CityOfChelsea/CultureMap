@@ -52,3 +52,11 @@ export function label_friendly_layers(layers, inverted){
   };
   return label_friendly_layers;
 }
+
+export function filterByCategory(feature, layer, cat){
+  if (feature.properties.TAB_NAME == cat) {
+    return true;
+  } else {
+    return false;
+  }
+}
