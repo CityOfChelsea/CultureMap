@@ -131,73 +131,14 @@ let query = L.esri.query({
         feature.layer = layer;
         layer.on('click', () => {
 
-
           $("#featureModal .modal-title").html(feature.properties.NAME);
           $("#featureModal .learn-more").attr("href", feature.properties.WEBSITE);
           let modal_content = modal.formatContent(feature);
           $("#featureModal #modalBodyContent").html(modal_content);
           $("#featureModal").modal("show");
 
-          // $('#votes').attr('id',feature.id);
-
-          function castVote(feature) {
-            voteFeatureService.query()
-              .where(`ASSET_ID = '${feature.id}'`)
-              .run((error, featureCollection) => {
-                if (error) {
-                  console.log(error)
-                } else {
-
-                  if (featureCollection.features.length == 0) {
-
-                    const params = {
-                      "features": {
-                        "geometry": null,
-                        "attributes": {
-                          "ASSET_ID": feature.id,
-                          "NAME": feature.properties.NAME,
-                          "VOTES": 1
-                        }
-                      }
-                    }
-
-                    L.esri.post(`${cfg.votes_url}/addFeatures`, params, function(error, response) {
-                      if (error) {
-                        console.log(error);
-                      } else {
-                        console.log(response);
-                      }
-                    });
-                  } else {
-
-                    let fid = +featureCollection.features[0].id
-                    let currentNumVotes = +featureCollection.features[0].properties['VOTES']
-
-                    const params = {
-                      "features": {
-                        "geometry": null,
-                        "attributes": {
-                          "FID": fid,
-                          "VOTES": currentNumVotes++
-                        }
-                      }
-                    }
-
-                    L.esri.post(`${cfg.votes_url}/updatefeatures`, params, function(error, response) {
-                      if (error) {
-                        console.log(error);
-                      } else {
-                        console.log(response);
-                      }
-                    });
-                  }
-                }
-
-              });
-          }
-
-          $('#votes').on('click', ev => castVote(feature))
-
+          //When the votes button is clicked, cast a vote
+          $('#votes').one('click', ev => modal.castVote(voteFeatureService, feature))
 
           modal.fetchAttachPicUrls(cfg.feature_layer_URL, feature.id)
             .then(pic_urls => {

@@ -16,15 +16,14 @@ export function formatContent(feature) {
   return modal_content
 }
 
-export function formatPics(feature, pic_urls){
+export function formatPics(feature, pic_urls) {
 
   let carousel_content = `<div class="carousel-inner">`;
   if (pic_urls.length > 1) {
-    pic_urls.forEach((pic_url, i) =>{
-      if (i == 0){
+    pic_urls.forEach((pic_url, i) => {
+      if (i == 0) {
         carousel_content += `<div class="carousel-item active"><img class="d-block w-100" src="${pic_url}" alt=""></div>`
-      }
-      else{
+      } else {
         carousel_content += `<div class="carousel-item"><img class="d-block w-100" src="${pic_url}" alt=""></div>`
       }
     })
@@ -67,4 +66,37 @@ export function fetchAttachPicUrls(service_url, objectId) {
       }
     })
   })
+}
+
+
+export function castVote(featureService, feature) {
+
+  const url = featureService.options.url
+  console.log(featureService);
+  featureService.query()
+    .where(`ASSET_ID = '${feature.id}'`)
+    .run((error, featureCollection) => {
+      if (error) {
+        console.log(error)
+      } else {
+
+        const params = {
+          "features": {
+            "geometry": null,
+            "attributes": {
+              "ASSET_ID": feature.id,
+              "NAME": feature.properties.NAME,
+            }
+          }
+        }
+
+        L.esri.post(`${url}/addFeatures`, params, function(error, response) {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log(response);
+          }
+        });
+      }
+    });
 }

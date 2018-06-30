@@ -21299,63 +21299,9 @@ var query = L.esri.query({
           $("#featureModal #modalBodyContent").html(modal_content);
           $("#featureModal").modal("show");
 
-          // $('#votes').attr('id',feature.id);
-
-          function castVote(feature) {
-            voteFeatureService.query().where('ASSET_ID = \'' + feature.id + '\'').run(function (error, featureCollection) {
-              if (error) {
-                console.log(error);
-              } else {
-
-                if (featureCollection.features.length == 0) {
-
-                  var params = {
-                    "features": {
-                      "geometry": null,
-                      "attributes": {
-                        "ASSET_ID": feature.id,
-                        "NAME": feature.properties.NAME,
-                        "VOTES": 1
-                      }
-                    }
-                  };
-
-                  L.esri.post(cfg.votes_url + '/addFeatures', params, function (error, response) {
-                    if (error) {
-                      console.log(error);
-                    } else {
-                      console.log(response);
-                    }
-                  });
-                } else {
-
-                  var fid = +featureCollection.features[0].id;
-                  var currentNumVotes = +featureCollection.features[0].properties['VOTES'];
-
-                  var _params = {
-                    "features": {
-                      "geometry": null,
-                      "attributes": {
-                        "FID": fid,
-                        "VOTES": currentNumVotes++
-                      }
-                    }
-                  };
-
-                  L.esri.post(cfg.votes_url + '/updatefeatures', _params, function (error, response) {
-                    if (error) {
-                      console.log(error);
-                    } else {
-                      console.log(response);
-                    }
-                  });
-                }
-              }
-            });
-          }
-
-          $('#votes').on('click', function (ev) {
-            return castVote(feature);
+          //When the votes button is clicked, cast a vote
+          $('#votes').one('click', function (ev) {
+            return modal.castVote(voteFeatureService, feature);
           });
 
           modal.fetchAttachPicUrls(cfg.feature_layer_URL, feature.id).then(function (pic_urls) {
@@ -21518,6 +21464,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.formatContent = formatContent;
 exports.formatPics = formatPics;
 exports.fetchAttachPicUrls = fetchAttachPicUrls;
+exports.castVote = castVote;
 
 var _config = __webpack_require__(/*! ./config.js */ "./src/assets/js/config.js");
 
@@ -21581,6 +21528,36 @@ function fetchAttachPicUrls(service_url, objectId) {
         resolve(urls);
       }
     });
+  });
+}
+
+function castVote(featureService, feature) {
+
+  var url = featureService.options.url;
+  console.log(featureService);
+  featureService.query().where('ASSET_ID = \'' + feature.id + '\'').run(function (error, featureCollection) {
+    if (error) {
+      console.log(error);
+    } else {
+
+      var params = {
+        "features": {
+          "geometry": null,
+          "attributes": {
+            "ASSET_ID": feature.id,
+            "NAME": feature.properties.NAME
+          }
+        }
+      };
+
+      L.esri.post(url + '/addFeatures', params, function (error, response) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log(response);
+        }
+      });
+    }
   });
 }
 
