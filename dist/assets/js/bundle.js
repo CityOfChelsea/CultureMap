@@ -21380,7 +21380,6 @@ var query = L.esri.query({
       }
     },
     debug: true
-
   });
 
   //Sidebar
@@ -21554,10 +21553,32 @@ function addContent(content) {
   $("#featureModal #modalBodyContent").html(content);
 }
 
+function colorizeBtn(node) {
+  $(node).removeClass('btn-light');
+  $(node).addClass('btn-success');
+}
+
+function resetLikeBtn(node) {
+  $(node).removeClass('btn-success');
+  $(node).addClass('btn-light');
+}
+
+function removeLikeTooltip(node) {
+  $(node).tooltip('hide');
+  $(node).tooltip('disable');
+}
+
+function resetLikeTooltip(node) {
+  $(node).tooltip('enable');
+}
+
 function create(feature, layer) {
 
   feature.layer = layer;
   layer.on('click', function () {
+
+    resetLikeBtn('#votes');
+    resetLikeTooltip('#votes');
 
     //Add modal content
     addTitle(feature.properties.NAME);
@@ -21570,7 +21591,9 @@ function create(feature, layer) {
 
     //When the votes button is clicked, cast a vote
     $('#votes').one('click', function (ev) {
-      return castVote(voteFeatureService, feature);
+      castVote(voteFeatureService, feature);
+      colorizeBtn('#votes');
+      removeLikeTooltip('#votes');
     });
 
     fetchAttachPicUrls(_config.feature_layer_URL, feature.id).then(function (pic_urls) {

@@ -174,7 +174,6 @@ let query = L.esri.query({
       onSubmit: (node, query, result) => typeahead.search(node, query, result, mymap, cfg.zoomDisableCluster)
     },
     debug: true
-
   });
 
   //Sidebar

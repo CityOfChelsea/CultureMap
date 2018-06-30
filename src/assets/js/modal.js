@@ -118,10 +118,33 @@ function addContent(content) {
   $("#featureModal #modalBodyContent").html(content)
 }
 
+function colorizeBtn(node){
+  $(node).removeClass('btn-light');
+  $(node).addClass('btn-success');
+}
+
+function resetLikeBtn(node){
+  $(node).removeClass('btn-success');
+  $(node).addClass('btn-light');
+}
+
+function removeLikeTooltip(node){
+  $(node).tooltip('hide');
+  $(node).tooltip('disable');
+}
+
+function resetLikeTooltip(node){
+  $(node).tooltip('enable');
+}
+
 export function create(feature, layer) {
 
   feature.layer = layer;
   layer.on('click', () => {
+
+    resetLikeBtn('#votes');
+    resetLikeTooltip('#votes')
+
 
     //Add modal content
     addTitle(feature.properties.NAME);
@@ -133,7 +156,11 @@ export function create(feature, layer) {
     $("#featureModal").modal("show");
 
     //When the votes button is clicked, cast a vote
-    $('#votes').one('click', ev => castVote(voteFeatureService, feature))
+    $('#votes').one('click', ev => {
+      castVote(voteFeatureService, feature);
+      colorizeBtn('#votes');
+      removeLikeTooltip('#votes');
+    })
 
     fetchAttachPicUrls(feature_layer_URL, feature.id)
       .then(pic_urls => {
