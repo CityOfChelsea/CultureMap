@@ -1,7 +1,7 @@
 export const base_map_URL = 'https://api.mapbox.com/styles/v1/tohorner/cjhijn5ba1zon2rpelkgflt7y/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoidG9ob3JuZXIiLCJhIjoiY2l6NGFoeXIxMDRscDMycGd2dzVzZTg3NyJ9.Vfe_mGvZ-mHldkO0x2gXEw';
 export const feature_layer_URL = 'https://services3.arcgis.com/U4SbXhYNLOfN36SP/arcgis/rest/services/View_for_Shortlist/FeatureServer/0/';
 export const historic_district_URL = 'https://services3.arcgis.com/U4SbXhYNLOfN36SP/arcgis/rest/services/Chelsea_Historic_Districts/FeatureServer/0'
-
+export const votes_url = 'https://services3.arcgis.com/U4SbXhYNLOfN36SP/arcgis/rest/services/votes/FeatureServer/0';
 /**
  * Dictionary that maps label-friendly asset Categories
  * to HTML and CSS-friendly asset-categories
