@@ -1,6 +1,13 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
 
+<style>
+h1 {
+  display:none
+}
+
+</style>
+
 ## Chelsea CultureMap Functionality Matrix
 
 | Feature                                          | Status                             | Description                                                                                                                                                                                                                                                              |
@@ -8,7 +15,7 @@
 | Point clustering                                 | <i class="material-icons">done</i> | Cultural assets cluster, grouped and symbolized by major category.                                                                                                                                                                                                       |
 | Historic districts                               | <i class="material-icons">done</i> | Under the settings menu, users can toggle the display of historic districts. When users click on a historic district, a popup lists all historic districts that encompass that point.                                                                                    |
 | Mobile support                                   | <i class="material-icons">done</i> | CultureMap is built using Leaflet, an open-source javascript mapping library, and Bootstrap, a mobile-first layout library designed by Twitter.                                                                                                                          |
-| Voting                                           | <i class="material-icons">done</i> | When a user clicks on a cultural asset, the resulting popup box includes a "like" button.                                                                                                                                                                                |
+| Voting                                           | <i class="material-icons">done</i> | When a user clicks on a cultural asset, the resulting popup box includes a "like" button. Likes are logged in an table hosted on ArcGIS Online.                                                                                                                                                                               |
 | Layer filtering                                  | <i class="material-icons">done</i> | A layer control in the top-right corner expands when users hover or click it.                                                                                                                                                                                                                                                                         |
 | Search                                           | <i class="material-icons">done</i> | An auto-suggesting searchbox in the top right corner allows users to search for identified cultural assets.                                                                                                                                                                                                                                                                         |
 | Bilingual support                                | <i class="material-icons">done</i> | The navigation bar includes a button that allows users to toggle between English and Spanish. Translation services are provided by Google Translate, which often produces mistranslations. When hovering over text, users are prompted to suggest improved translations. |
@@ -17,5 +24,5 @@
 | Filtering by date of asset construction/activity |                                    |                                                                                                                                                                                                                                                                          |
 | Explanatory landing page                         | <i class="material-icons">done</i> |                                                                                                                                                                                                                                                                          |
 | Ability to moderate submissions                  | <i class="material-icons">done</i> |                                                                                                                                                                                                                                                                          |
-| Sidebar display                                  | <i class="material-icons">done</i> |                                                                                                                                                                                                                                                                          |
+| Sidebar display                                  | <i class="material-icons">done</i> | A sidebar lists cultural assets displayed on the map.                                                                                                                                                                                                                                                                         |
 |                                                  |                                    |                                                                                                                                                                                                                                                                          |
