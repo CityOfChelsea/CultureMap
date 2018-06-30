@@ -145,7 +145,6 @@ export function create(feature, layer) {
     resetLikeBtn('#votes');
     resetLikeTooltip('#votes')
 
-
     //Add modal content
     addTitle(feature.properties.NAME);
     addWebsite(feature.properties.WEBSITE);
