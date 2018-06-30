@@ -73,7 +73,6 @@ function fetchAttachPicUrls(service_url, objectId) {
   })
 }
 
-
 function castVote(featureService, feature) {
 
   const url = featureService.options.url
@@ -110,30 +109,39 @@ function addTitle(title) {
   $("#featureModal .modal-title").html(title);
 }
 
-function addWebsite(website) {
-  $("#featureModal .learn-more").attr("href", website);
+function addWebsiteLink(website) {
+  $("#learnMore").attr("href", website);
+}
+
+function toggleLearnMore(website) {
+  if (website) {
+    $('#learnMore').show()
+    addWebsiteLink(website)
+  } else {
+    $('#learnMore').hide();
+  }
 }
 
 function addContent(content) {
   $("#featureModal #modalBodyContent").html(content)
 }
 
-function colorizeBtn(node){
+function colorizeBtn(node) {
   $(node).removeClass('btn-light');
   $(node).addClass('btn-success');
 }
 
-function resetLikeBtn(node){
+function resetLikeBtn(node) {
   $(node).removeClass('btn-success');
   $(node).addClass('btn-light');
 }
 
-function removeLikeTooltip(node){
+function removeLikeTooltip(node) {
   $(node).tooltip('hide');
   $(node).tooltip('disable');
 }
 
-function resetLikeTooltip(node){
+function resetLikeTooltip(node) {
   $(node).tooltip('enable');
 }
 
@@ -147,7 +155,7 @@ export function create(feature, layer) {
 
     //Add modal content
     addTitle(feature.properties.NAME);
-    addWebsite(feature.properties.WEBSITE);
+    toggleLearnMore(feature.properties.WEBSITE);
     let modal_content = formatContent(feature);
     addContent(modal_content);
 

@@ -21545,8 +21545,17 @@ function addTitle(title) {
   $("#featureModal .modal-title").html(title);
 }
 
-function addWebsite(website) {
-  $("#featureModal .learn-more").attr("href", website);
+function addWebsiteLink(website) {
+  $("#learnMore").attr("href", website);
+}
+
+function toggleLearnMore(website) {
+  if (website) {
+    $('#learnMore').show();
+    addWebsiteLink(website);
+  } else {
+    $('#learnMore').hide();
+  }
 }
 
 function addContent(content) {
@@ -21582,7 +21591,7 @@ function create(feature, layer) {
 
     //Add modal content
     addTitle(feature.properties.NAME);
-    addWebsite(feature.properties.WEBSITE);
+    toggleLearnMore(feature.properties.WEBSITE);
     var modal_content = formatContent(feature);
     addContent(modal_content);
 
