@@ -151,7 +151,7 @@ export function create(feature, layer) {
   layer.on('click', () => {
 
     resetLikeBtn('#votes');
-    resetLikeTooltip('#votes')
+    // resetLikeTooltip('#votes')
 
     //Add modal content
     addTitle(feature.properties.NAME);
@@ -166,7 +166,6 @@ export function create(feature, layer) {
     $('#votes').one('click', ev => {
       castVote(voteFeatureService, feature);
       colorizeBtn('#votes');
-      removeLikeTooltip('#votes');
     })
 
     fetchAttachPicUrls(feature_layer_URL, feature.id)

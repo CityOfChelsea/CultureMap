@@ -21587,7 +21587,7 @@ function create(feature, layer) {
   layer.on('click', function () {
 
     resetLikeBtn('#votes');
-    resetLikeTooltip('#votes');
+    // resetLikeTooltip('#votes')
 
     //Add modal content
     addTitle(feature.properties.NAME);
@@ -21602,7 +21602,6 @@ function create(feature, layer) {
     $('#votes').one('click', function (ev) {
       castVote(voteFeatureService, feature);
       colorizeBtn('#votes');
-      removeLikeTooltip('#votes');
     });
 
     fetchAttachPicUrls(_config.feature_layer_URL, feature.id).then(function (pic_urls) {
