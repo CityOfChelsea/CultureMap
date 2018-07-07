@@ -1,5 +1,3 @@
-
-
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
 
@@ -9,13 +7,6 @@ h1 {
 }
 </style>
 
-<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
-
-	- [Chelsea CultureMap Documentation](#chelsea-culturemap-documentation)
-		- [Introduction](#introduction)
-		- [Editing Data](#editing-data)
-
-<!-- /TOC -->
 
 ## Chelsea CultureMap Documentation
 
@@ -26,7 +17,28 @@ Chelsea CultureMap is an online [cultural asset mapping](http://www.artscapediy.
 CultureMap works in the following manner:
 
 - Public users can submit new assets via [the survey](https://arcg.is/0XGP9S), which is hosted on [Survey123](https://survey123.arcgis.com/). Public users can access the survey via the [main CultureMap page](https://tohorner.github.io/CultureMap/dist/).
-- User-submitted data is stored as a [hosted feature layer](http://doc.arcgis.com/en/arcgis-online/manage-data/hosted-web-layers.htm) on ArcGIS Online.
-- Administrators can edit cultural asset data in tabular form, using the editor application, or with desktop ArcMap software (see ["Editing Data"]()).
+- User-submitted data is stored as a [hosted feature layer](http://doc.arcgis.com/en/arcgis-online/manage-data/hosted-web-layers.htm) on ArcGIS Online. *User-submitted cultural assets do not display on any public-facing maps until approved by an administrator*.
+- Administrators can edit cultural asset data in tabular form, using the editor application, or with desktop ArcMap software (see ["Editing Data"](https://tohorner.github.io/CultureMap/docs/#editing-data)).
+- Approved data is then displayed on the main Chelsea CultureMap page, which is hosted for free using [GitHub Pages](https://pages.github.com/).
 
-### Editing Data
+### Understanding the main CultureMap page
+
+### Working with Survey123
+
+### Editing and Managing Data
+
+#### Approving user-submitted cultural assets
+
+#### Adding/removing photos
+
+#### Managing user "voting" data
+
+### Advanced Customization
+
+#### Custom URL
+
+#### Adding/removing cultural asset categories
+
+#### Custom styling
+
+#### Hosting CultureMap
