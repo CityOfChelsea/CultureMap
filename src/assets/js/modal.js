@@ -159,8 +159,7 @@ export function create(feature, layer) {
     let modal_content = formatContent(feature);
     addContent(modal_content);
 
-    //Show the modal
-    $("#featureModal").modal("show");
+
 
     //When the votes button is clicked, cast a vote
     $('#votes').one('click', ev => {
@@ -174,5 +173,8 @@ export function create(feature, layer) {
         $('#featureCarousel').html(carousel_content)
       })
       .catch(err => console.log(err))
+
+    //Show the modal
+    $("#featureModal").modal("show");
   })
 }

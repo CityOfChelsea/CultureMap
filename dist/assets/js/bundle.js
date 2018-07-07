@@ -21595,9 +21595,6 @@ function create(feature, layer) {
     var modal_content = formatContent(feature);
     addContent(modal_content);
 
-    //Show the modal
-    $("#featureModal").modal("show");
-
     //When the votes button is clicked, cast a vote
     $('#votes').one('click', function (ev) {
       castVote(voteFeatureService, feature);
@@ -21610,6 +21607,9 @@ function create(feature, layer) {
     }).catch(function (err) {
       return console.log(err);
     });
+
+    //Show the modal
+    $("#featureModal").modal("show");
   });
 }
 
