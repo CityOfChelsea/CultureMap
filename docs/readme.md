@@ -1,6 +1,3 @@
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
-
 <style>
 h1 {
   display:none
@@ -44,6 +41,39 @@ Survey123 Connect allows users to create and edit surveys in Microsoft Excel usi
 
 ### Editing and Managing Data
 
+#### Editing methods
+
+CultureMap provides administrators with three primary avenues for managing and editing cultural asset data: an online data spreadsheet, a map-based editor application, and ArcMap desktop software.
+
+##### Online data spreadsheet
+
+The Core Feature Service, which stores all of CultureMap's cultural asset data, can be accessed via the Content tab of the administrator's ArcGIS Online dashboard. The Core Feature Service is stored in a directory named `Chelsea_CultureMap`.
+
+![](assets/markdown-img-paste-2018070814290477.png)
+*ArcGIS Online dashboard, with contents of* `Chelsea_CultureMap` *displayed*.
+
+After clicking on the Core Feature Service, an administrator can edit cultural asset data by clicking on the "data" tab and double-clicking on individual cells. Note that the spreadsheet interface allows administrators to *edit* asset data, but not *create* or *delete* rows of data. Fields (columns) can be added or deleted.
+
+![](assets/markdown-img-paste-20180708143046945.png)
+*Core Feature Service, displayed in spreadsheet form*
+
+##### Editor Application
+
+The folder `Chelsea_CultureMap` contains a editor application named `Asset Editor`. Once on the item page for the `Asset Editor`, administrators can click on "View Application," to launch the editing app. The editing application is also accessible from the main CultureMap page, under `Settings > For Administrators`.
+
+![](assets/markdown-img-paste-20180708145802184.png)
+*Item page for the* `Asset Editor`.
+
+With the `Editor App` open, administrators can filter assets by major category and approval status. The filter can be toggled by clicking the funnel icon in the upper-left corner. In the `STATUS` dropdown menu, `0` denotes unapproved assets, while `1` denotes approved assets.
+
+![](assets/markdown-img-paste-20180708150345332.png)
+*Editor app with filter menu displayed*
+
+Administrators can edit assets by either clicking the pencil/list icon in the upper-left corner or clicking an asset and then the ellipses in the asset's popup window. 
+
+##### Desktop ArcMap Software
+
+Desktop ArcMap software allows users to download a local copy of hosted feature layers, make edits, and then synchronize those edits with the hosted layer. For details, please consults the ArcMap documentation [here](http://desktop.arcgis.com/en/arcmap/10.3/manage-data/editing-fundamentals/about-editing-data-from-feature-services.htm).
 
 
 #### Approving user-submitted cultural assets
