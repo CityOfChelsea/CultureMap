@@ -144,8 +144,8 @@ The Core Feature Service includes the following fields:
 | `SOURCE`       | Source of asset information (optional)                                                                             |
 | `DESCRIPTION`  | Description of asset to display in popup window. Valid HTML is accepted.                                           |
 | `TAGS`         | Tags associated with the asset. Not currently used, but could allow for future organizaito or filtering of assets. |
-| *Attachments*  | Attached photos.
-                                                                                                                   |
+| *Attachments*  | Attached photos.                                                                                                   |
+
 ### Advanced Customization
 
 #### Custom URL
