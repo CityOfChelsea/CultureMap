@@ -23,12 +23,15 @@ CultureMap is organized around the following workflow:
 
 ### Understanding the Main CultureMap Page
 
-The main CultureMap page serves as the primary point where public users interact with the application. The page uses the responsive Twitter Bootstrap framework to support both desktop and mobile devices:
+The main CultureMap page serves as the primary point where public users interact with the application. The page uses the responsive [Twitter Bootstrap]() framework to support both desktop and mobile devices:
 
 ![](assets/markdown-img-paste-20180708124916139.png)
+*Desktop CultureMap interface*
 
-![](assets/markdown-img-paste-20180708125023359.png){:height="50%" width="50%"}
+![](assets/markdown-img-paste-20180708125023359.png){width="250px" margin="auto"}
+*Mobile CultureMap interface*
 
+A full list of the main
 
 
 ### Working with Survey123
