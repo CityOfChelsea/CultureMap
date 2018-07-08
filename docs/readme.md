@@ -27,17 +27,17 @@ The main CultureMap page serves as the primary point where public users interact
 Using [Survey123](https://survey123.arcgis.com/), CultureMap allows users to submit cultural assets for administrator review. When respondents submit a survey, an entry is added to the Core Feature Service, hosted on ArcGIS Online. The survey can be edited by logging into Survey123 and downloading the survey and opening it in Survey123 Connect, a free desktop application, which can be downloaded [here](http://doc.arcgis.com/en/survey123/download/). Detailed Survey123 documentation is available [here](https://doc.arcgis.com/en/survey123/desktop/create-surveys/createfirstsurvey.htm).
 
 ![](assets/markdown-img-paste-20180708134726427.png)
-<p style="text-align:center">*Survey123 dashboard, with survey download displayed.*</p>
+<p style="text-align:center">Survey123 dashboard, with survey download displayed.</p>
 
 With the survey open in Survey123 Connect, administrators can edit question content, add questions, and change question types. Keep in mind, however, that all submitted data fields must correspond with a data field in CultureMaps's Core Feature Service hosted on ArcGIS Online. Both the name and data type (e.g. integer, text) must match. (Managing and editing data is covered below.)
 
 Survey123 Connect allows users to create and edit surveys in Microsoft Excel using the [XLS Forms specification](http://xlsform.org/). Esri has published [detailed documentation](https://doc.arcgis.com/en/survey123/desktop/create-surveys/xlsformessentials.htm) for how to work with XLS Forms to create and edit Survey123 surveys.
 
 ![](assets/markdown-img-paste-20180708135551773.png)
-<p style="text-align:center">*Screenshot from the OS X version of Survey123 Connect. The survey specification can be opened in Microsoft Excel by clicking on the icon in the upper left-hand corner. (Survey123 Connect is available for Windows, but the user interface may not be identical.)*</p>
+<p style="text-align:center">Screenshot from the OS X version of Survey123 Connect. The survey specification can be opened in Microsoft Excel by clicking on the icon in the upper left-hand corner. (Survey123 Connect is available for Windows, but the user interface may not be identical.)</p>
 
 ![](assets/markdown-img-paste-20180708141104263.png)
-<p style="text-align:center">*Screenshot from an Survey123 survey, open for editing in Microsoft Excel*</p>
+<p style="text-align:center">Screenshot from an Survey123 survey, open for editing in Microsoft Excel</p>
 
 ### Editing and Managing Data
 
@@ -50,24 +50,24 @@ CultureMap provides administrators with three primary avenues for managing and e
 The Core Feature Service, which stores all of CultureMap's cultural asset data, can be accessed via the Content tab of the administrator's ArcGIS Online dashboard. The Core Feature Service is stored in a directory named `Chelsea_CultureMap`.
 
 ![](assets/markdown-img-paste-2018070814290477.png)
-<p style="text-align:center">*ArcGIS Online dashboard, with contents of* `Chelsea_CultureMap` *displayed*.</p>
+<p style="text-align:center">ArcGIS Online dashboard, with contents of Chelsea_CultureMap displayed.</p>
 
 After clicking on the Core Feature Service, an administrator can edit cultural asset data by clicking on the "data" tab and double-clicking on individual cells. Note that the spreadsheet interface allows administrators to *edit* asset data, but not *create* or *delete* rows of data. Fields (columns) can be added or deleted.
 
 ![](assets/markdown-img-paste-20180708143046945.png)
-<p style="text-align:center">*Core Feature Service, displayed in spreadsheet form*</p>
+<p style="text-align:center">Core Feature Service, displayed in spreadsheet form</p>
 
 ##### Editor Application
 
 The folder `Chelsea_CultureMap` contains a editor application named `Asset Editor`. Once on the item page for the `Asset Editor`, administrators can click on "View Application," to launch the editing app. The editing application is also accessible from the main CultureMap page, under `Settings > For Administrators`.
 
 ![](assets/markdown-img-paste-20180708145802184.png)
-<p style="text-align:center">*Item page for the* `Asset Editor`.</p>
+<p style="text-align:center">Item page for the Asset Editor.</p>
 
 With the `Editor App` open, administrators can filter assets by major category and approval status. The filter can be toggled by clicking the funnel icon in the upper-left corner. In the `STATUS` dropdown menu, `0` denotes unapproved assets, while `1` denotes approved assets.
 
 ![](assets/markdown-img-paste-20180708150345332.png)
-<p style="text-align:center">*Editor app with filter menu displayed*</p>
+<p style="text-align:center">Editor app with filter menu displayed</p>
 
 Administrators can edit assets by either clicking the pencil/list icon in the upper-left corner or clicking an asset and then the ellipses in the asset's popup window.
 
@@ -99,7 +99,7 @@ If photos are attached to a cultural asset, then CultureMap will display those p
 If more than one photo is attached, then the asset's popup window will display a "carousel" gallery of all available images. For best results, photos should be sized the same, using a landscape orientation.
 
 ![](assets/markdown-img-paste-2018070815263831.png)
-<p style="text-align:center">*Core Feature Service data spreadsheet, with photo attachment field displayed to the right.*</p>
+<p style="text-align:center">Core Feature Service data spreadsheet, with photo attachment field displayed to the right.</p>
 
 ##### Public URL
 
@@ -119,7 +119,7 @@ Public CultureMap users can "like" identified cultural assets by clicking on the
 The table also includes timestamps of when the vote was made/edited. These fields can be turned on by clicking the menu icon in the table's upper right-hand corner and selecting "Show/Hide Columns."
 
 ![](assets/markdown-img-paste-20180708154507836.png)
-<p style="text-align:center">*Cultural asset popup window, with like button in upper right-hand corner*</p>
+<p style="text-align:center">Cultural asset popup window, with like button in upper right-hand corner</p>
 
 #### Core Feature Service Specification
 
