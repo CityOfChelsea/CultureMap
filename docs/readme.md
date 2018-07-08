@@ -69,19 +69,83 @@ With the `Editor App` open, administrators can filter assets by major category a
 ![](assets/markdown-img-paste-20180708150345332.png)
 *Editor app with filter menu displayed*
 
-Administrators can edit assets by either clicking the pencil/list icon in the upper-left corner or clicking an asset and then the ellipses in the asset's popup window. 
+Administrators can edit assets by either clicking the pencil/list icon in the upper-left corner or clicking an asset and then the ellipses in the asset's popup window.
 
 ##### Desktop ArcMap Software
 
 Desktop ArcMap software allows users to download a local copy of hosted feature layers, make edits, and then synchronize those edits with the hosted layer. For details, please consults the ArcMap documentation [here](http://desktop.arcgis.com/en/arcmap/10.3/manage-data/editing-fundamentals/about-editing-data-from-feature-services.htm).
 
-
 #### Approving user-submitted cultural assets
 
-#### Adding/removing photos
+Display of cultural assets on public-facing cultural asset map is controlled by the `STATUS` field in the Core Feature Service. Cultural assets will appear on the map only if `STATUS` is set to `1`. The `STATUS` field uses the following convention for denoting the status of a cultural asset.
+
+| Value | Description        |
+| ----- | ------------------ |
+| `1`   | Approved           |
+| `0`   | Unapproved         |
+| `-1`  | Rejected           |
+| `2`   | More info required |
+
+Administrators can edit the `STATUS` field using any of the three methods described above. Note that all survey responses are timestamped, so administrators can use the Core Feature Service spreadsheet interface to sort cultural assets by time submitted, allowing for easy review of the most recent submissions.
+
+#### Managing photos
+
+When a public user clicks on a cultural asset on the public-facing cultural asset map, a pop-up window appears that contains asset information, including photos, if available. CultureMap uses two methods for displaying images: photo attachments and a publicly-accessible URL.
+
+##### Photo attachments
+
+If photos are attached to a cultural asset, then CultureMap will display those photos in the asset's pop-up window. Photos can be attached to a cultural asset either by submitting a photo along with a survey response or by adding photos via Core Feature Service's spreadsheet interface.
+
+If more than one photo is attached, then the asset's popup window will display a "carousel" gallery of all available images. For best results, photos should be sized the same, using a landscape orientation.
+
+![](assets/markdown-img-paste-2018070815263831.png)
+*Core Feature Service data spreadsheet, with photo attachment field displayed to the right.*
+
+##### Public URL
+
+If photos are not attached to a given asset, then CultureMap will display the photo specified under `PIC_URL` of the Core Feature Service. The field must contain a valid, publicly-accessible URL. If no URL is provided, then the popup will simply omit a picture.
 
 #### Managing user "voting" data
 
+Public CultureMap users can "like" identified cultural assets by clicking on the thumbs-up icon in the upper-right corner of each asset's popup. Each "like" is recorded in the hosted table `votes`, stored within the `Chelsea_CultureMap` folder. The `votes` table contains the following fields:
+
+| Field      | Description                                                                                     |
+| ---------- | ----------------------------------------------------------------------------------------------- |
+| `ASSET_ID` | ID of cultural asset, as specified in the Core Feature Service                                  |
+| `NAME`     | Name of cultural asset                                                                          |
+| `IP`       | IP address of voter. IP tracking not currently implemented                                      |
+| `LOCATION` | General location of voter, as given by an IP georeferencing service. Not currently implemented. |
+
+The table also includes timestamps of when the vote was made/edited. These fields can be turned on by clicking the menu icon in the table's upper right-hand corner and selecting "Show/Hide Columns."
+
+![](assets/markdown-img-paste-20180708154507836.png)
+*Cultural asset popup window, with like button in upper right-hand corner*
+
+#### Core Feature Service Specification
+
+The Core Feature Service includes the following fields:
+
+| Field          | Description                                                                                                        |
+| -------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `NAME`         | Name of the cultural asset.                                                                                        |
+| `TAB_NAME`     | Primary category of cultural asset.                                                                                |
+| `PIC_URL`      | A publicly-accessible URL of photo to display, if no pictures are attached to asset.                               |
+| `THUMB_URL`    | Thumbnail of asset. Not currently used.                                                                            |
+| `ADDRESS`      | Street address of asset, if available.                                                                             |
+| `SUBCATEGORY1` | Primary subcategory of asset.                                                                                      |
+| `CATEGORY2`    | Secondary asset category (optional)                                                                                |
+| `SUBCATEGORY2` | Secondary subateogry (optional)                                                                                    |
+| `MAKER`        | The individual or organization that created the cultural asset, if known.                                          |
+| `FUNDER`       | The individual or organization that crated the cultural asset, if known.                                           |
+| `WEBSITE`      | Website of cultural asset. The asset popup window links to the webste.                                             |
+| `MACRIS_ID`    | MA Historical Commission ID number, if available.                                                                  |
+| `ASSETYEAR`    | The year the asset was created/founded/initiated.                                                                  |
+| `STATUS`       | Approval status (see above)                                                                                        |
+| `SOURCE`       | Source of asset information (optional)                                                                             |
+| `DESCRIPTION`  | Description of asset to display in popup window. Valid HTML is accepted.                                           |
+| `TAGS`         | Tags associated with the asset. Not currently used, but could allow for future organizaito or filtering of assets. |
+| *Attachments*  | Attached photos.
+                                                                                                                   |
 ### Advanced Customization
 
 #### Custom URL
