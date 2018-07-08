@@ -28,10 +28,10 @@ The main CultureMap page serves as the primary point where public users interact
 ![](assets/markdown-img-paste-20180708124916139.png)
 *Desktop CultureMap interface*
 
-![](assets/markdown-img-paste-20180708125023359.png){width="250px" margin="auto"}
+<img src="assets/markdown-img-paste-20180708125023359.png" width="250px" style="margin:auto">
 *Mobile CultureMap interface*
 
-A full list of the main
+
 
 
 ### Working with Survey123
