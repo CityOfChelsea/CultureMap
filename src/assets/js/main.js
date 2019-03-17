@@ -24,10 +24,14 @@ $(function() {
 ///////////////
 
 // Initialize the Map
-let mymap = L.map('map', {
-  zoomControl: false,
-  scrollWheelZoom: false
-})
+
+// Something funky going on with zoom control in
+// Lower right hand corner. Added zoom control at map initailization instead.
+// let mymap = L.map('map', {
+//   zoomControl: true,
+//   scrollWheelZoom: true,
+//   doubleClickZoom: true
+// })
 
 //Add zoom control
 let zoom = new L.Control.Zoom({

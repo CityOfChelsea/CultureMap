@@ -12,6 +12,7 @@ $font-family-sans-serif: 'Montserrat';
 @import 'components/modals';
 @import 'leaflet/symbology';
 @import 'leaflet/layer_control';
+@import 'leaflet/zoom_control';
 
 // Import bootstrap
 @import "../../../node_modules/bootstrap/scss/bootstrap";
@@ -35,9 +36,10 @@ html,
 //Adjust top padding of main content according to
 //Navbar height.
 #main {
-  @media screen and (max-width: 540px) {
+  @media screen and (max-width: 800px) {
     padding: 56px 0px 0px; //mobile
   }
+
   padding: 86px 0 0; //Full size
 }
 
