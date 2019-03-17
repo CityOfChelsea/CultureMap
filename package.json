@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --progress -p",
     "watch": "webpack --progress --watch",
-    "server": "webpack-dev-server --open"
+    "server": "webpack-dev-server --open",
+    "sass": "sass ./src/assets/sass/app.scss:./dist/assets/css/app.nested.css --style nested"
   },
   "author": "",
   "license": "ISC",

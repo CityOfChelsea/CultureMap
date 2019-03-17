@@ -41,7 +41,7 @@ div[class*="digits-2"] {
   margin-left: -24px;
 }
 
-div[class*="digits-2"]before {
+div[class*="digits-2"]:before {
   border-width: 3px;
 }
 
