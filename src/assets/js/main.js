@@ -26,17 +26,18 @@ $(function() {
 // Initialize the Map
 
 // Something funky going on with zoom control in
-// Lower right hand corner. Added zoom control at map initailization instead.
-// let mymap = L.map('map', {
-//   zoomControl: true,
-//   scrollWheelZoom: true,
-//   doubleClickZoom: true
-// })
+
+let mymap = L.map('map', {
+  zoomControl: true,
+  scrollWheelZoom: true,
+  doubleClickZoom: true
+})
 
 //Add zoom control
-let zoom = new L.Control.Zoom({
-  position: 'bottomright'
-}).addTo(mymap);
+// Lower right hand corner. Added zoom control at map initailization instead.
+// let zoom = new L.Control.Zoom({
+//   position: 'bottomright'
+// }).addTo(mymap);
 
 //Initial map view
 mymap.setView([42.39, -71.035], 16);
